@@ -1,7 +1,11 @@
+"use client"
+
 import Link from "next/link"
 import { SectionHeader } from "@/components/section-header"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 import { Card } from "@/components/ui/card"
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 
 const featureCards = [
   {
@@ -92,9 +96,43 @@ const keyPages = [
 ]
 
 export default function HomePage() {
+  const [shouldAnimate, setShouldAnimate] = useState(false)
+
+  useEffect(() => {
+    // Check if this is first visit (intro animation was shown)
+    const hasSeenIntro = localStorage.getItem("mip-intro-seen")
+    if (!hasSeenIntro) {
+      // Wait for intro to complete before animating content
+      const timer = setTimeout(() => setShouldAnimate(true), 2600)
+      return () => clearTimeout(timer)
+    } else {
+      // No intro, animate immediately
+      setShouldAnimate(true)
+    }
+  }, [])
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (delay: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        delay,
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      },
+    }),
+  }
+
   return (
     <>
-      <section className="section">
+      <motion.section
+        className="section"
+        initial="hidden"
+        animate={shouldAnimate ? "visible" : "hidden"}
+        variants={fadeInUp}
+        custom={0}
+      >
         <div className="container">
           <div className="grid gap-10 lg:grid-cols-2">
             <div className="space-y-6">
@@ -161,9 +199,15 @@ export default function HomePage() {
             </Card>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section bg-muted/30">
+      <motion.section
+        className="section bg-muted/30"
+        initial="hidden"
+        animate={shouldAnimate ? "visible" : "hidden"}
+        variants={fadeInUp}
+        custom={0.1}
+      >
         <div className="container">
           <SectionHeader
             title="Core System Pillars"
@@ -180,9 +224,15 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section">
+      <motion.section
+        className="section"
+        initial="hidden"
+        animate={shouldAnimate ? "visible" : "hidden"}
+        variants={fadeInUp}
+        custom={0.2}
+      >
         <div className="container">
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="space-y-4">
@@ -226,9 +276,15 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section bg-muted/30">
+      <motion.section
+        className="section bg-muted/30"
+        initial="hidden"
+        animate={shouldAnimate ? "visible" : "hidden"}
+        variants={fadeInUp}
+        custom={0.3}
+      >
         <div className="container">
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="space-y-4">
@@ -261,9 +317,15 @@ export default function HomePage() {
             </Card>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="section">
+      <motion.section
+        className="section"
+        initial="hidden"
+        animate={shouldAnimate ? "visible" : "hidden"}
+        variants={fadeInUp}
+        custom={0.4}
+      >
         <div className="container">
           <Card className="p-6">
             <div className="grid gap-6 lg:grid-cols-2">
@@ -294,7 +356,7 @@ export default function HomePage() {
             </div>
           </Card>
         </div>
-      </section>
+      </motion.section>
     </>
   )
 }

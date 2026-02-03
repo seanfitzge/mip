@@ -78,3 +78,23 @@ body {
 .clip-triangle {
   clip-path: polygon(50% 6%, 96% 92%, 4% 92%);
 }
+
+/* Smooth animation performance */
+.intro-animation-wrapper {
+  will-change: opacity, transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout shift during intro animation */
+body {
+  overflow-x: hidden;
+}
+
+/* Hardware acceleration for smoother animations */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+}
