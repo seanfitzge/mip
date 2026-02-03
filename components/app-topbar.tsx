@@ -10,7 +10,7 @@ export function AppTopbar() {
         <Title order={3}>Metabolic Overview</Title>
       </Stack>
       <Group>
-        <Button variant="light">Export</Button>
+        <Button variant="light">Export report</Button>
         <Button>Start Sync</Button>
       </Group>
     </Group>

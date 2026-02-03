@@ -122,6 +122,52 @@ export default async function NutritionPage() {
         </Card>
       </SimpleGrid>
 
+      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="xs">
+            <Title order={4}>Evidence-based macro ranges</Title>
+            <Text size="sm" c="dimmed">
+              Protein: 2.0-2.7 g/kg during deficit, 1.6-2.2 g/kg maintenance.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Carbs: 3-5 g/kg strength, 5-7 g/kg mixed, 6-10 g/kg endurance.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Fat minimums: 20% of calories to protect hormones (sex-specific thresholds).
+            </Text>
+          </Stack>
+        </Card>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="xs">
+            <Title order={4}>Nutrient timing guidance</Title>
+            <Text size="sm" c="dimmed">
+              Primary: hit daily protein, carbs, and fat targets first.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Secondary: 0.4 g/kg protein per meal across 4+ meals, 3-4h apart.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Optional: shift 20-30 g carbs to evening when sleep &lt;70 for 3+ nights.
+            </Text>
+          </Stack>
+        </Card>
+      </SimpleGrid>
+
+      <Card withBorder radius="md" padding="lg">
+        <Stack gap="xs">
+          <Title order={4}>Energy availability safeguards</Title>
+          <Text size="sm" c="dimmed">
+            Females: clinical &lt;30 kcal/kg FFM, subclinical &lt;45 kcal/kg FFM for 5+ days.
+          </Text>
+          <Text size="sm" c="dimmed">
+            Males: clinical &lt;25 kcal/kg FFM, subclinical &lt;40 kcal/kg FFM for 14+ days.
+          </Text>
+          <Text size="sm" c="dimmed">
+            If thresholds are crossed, the system increases intake and recommends recovery.
+          </Text>
+        </Stack>
+      </Card>
+
       <Card withBorder radius="md" padding="lg">
         <Stack gap="sm">
           <Title order={4}>Today&apos;s log</Title>

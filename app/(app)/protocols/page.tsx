@@ -49,6 +49,62 @@ export default async function ProtocolsPage() {
           </Card>
         ))}
       </SimpleGrid>
+
+      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="xs">
+            <Title order={4}>Water weight reality check</Title>
+            <Text size="sm" c="dimmed">
+              Expect 1-3 kg (2-7 lb) increase in 24-48 hours from glycogen + water.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Peak weight days 1-2, stabilizes by days 3-5. This is not fat gain.
+            </Text>
+          </Stack>
+        </Card>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="xs">
+            <Title order={4}>Pacing guidance</Title>
+            <Text size="sm" c="dimmed">
+              Standard increase is +100-150 kcal/week (carb priority).
+            </Text>
+            <Text size="sm" c="dimmed">
+              If weight increases &gt;0.5 lb/week, slow to +50-75 kcal/week.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Pace faster when HRV improves and RHR drops; slower if stressed.
+            </Text>
+          </Stack>
+        </Card>
+      </SimpleGrid>
+
+      <Card withBorder radius="md" padding="lg">
+        <Stack gap="xs">
+          <Title order={4}>Personalization inputs</Title>
+          <Text size="sm" c="dimmed">
+            Depth and duration of deficit, initial body fat, sex, and biometric response
+            patterns adjust pacing automatically.
+          </Text>
+          <Text size="sm" c="dimmed">
+            Weekly micro-adjustments follow weight trends and recovery markers.
+          </Text>
+        </Stack>
+      </Card>
+
+      <Card withBorder radius="md" padding="lg">
+        <Stack gap="xs">
+          <Title order={4}>Critical note on rate</Title>
+          <Text size="sm" c="dimmed">
+            The 100-150 kcal/week increase is practitioner consensus, not definitive evidence.
+          </Text>
+          <Text size="sm" c="dimmed">
+            2024 research suggests immediate return to maintenance may perform similarly.
+          </Text>
+          <Text size="sm" c="dimmed">
+            MIP tests both approaches and updates recommendations as data improves.
+          </Text>
+        </Stack>
+      </Card>
     </Stack>
   )
 }

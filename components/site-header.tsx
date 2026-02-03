@@ -6,6 +6,7 @@ import { Anchor, Button, Container, Group, Text } from "@mantine/core"
 const navItems = [
   { href: "/vision", label: "Vision" },
   { href: "/roadmap", label: "Roadmap" },
+  { href: "/architecture", label: "Architecture" },
   { href: "/dashboard", label: "App Preview" }
 ]
 
@@ -31,7 +32,9 @@ export function SiteHeader() {
                 {item.label}
               </Anchor>
             ))}
-            <Button variant="light">Join waitlist</Button>
+            <Button component={Link} href="/dashboard" variant="light">
+              Join waitlist
+            </Button>
           </Group>
         </Group>
       </Container>

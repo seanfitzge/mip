@@ -1,6 +1,7 @@
 import { getBiometricsSummary, getBiometricsTrend } from "@/lib/data/biometrics"
 import { getMacroTargets } from "@/lib/data/macros"
 import { getResearchPapers } from "@/lib/data/research"
+import { getCurrentUser } from "@/lib/data/user"
 import { SectionHeader } from "@/components/section-header"
 import { StatCard } from "@/components/stat-card"
 import { MiniLineChart } from "@/components/charts/mini-line-chart"
@@ -14,6 +15,9 @@ export default async function DashboardPage() {
   const trend = await getBiometricsTrend()
   const macros = await getMacroTargets()
   const research = await getResearchPapers()
+  const user = await getCurrentUser()
+
+  const recoveryIcon = biometrics.recoveryGrade === "optimal" ? "✓" : biometrics.recoveryGrade === "good" ? "✓" : "⚠"
 
   return (
     <Stack gap="xl">
@@ -34,7 +38,7 @@ export default async function DashboardPage() {
             <Group justify="space-between">
               <Title order={4}>Recovery grade</Title>
               <Text size="sm" c="dimmed">
-                {biometrics.recoveryGrade.toUpperCase()}
+                {recoveryIcon} {biometrics.recoveryGrade.toUpperCase()}
               </Text>
             </Group>
             <Text size="sm" c="dimmed">
@@ -58,7 +62,8 @@ export default async function DashboardPage() {
         details={[
           "HRV trend below baseline threshold.",
           "RHR elevated above baseline for two days.",
-          "Increase calories 5-10% (carbohydrate priority)."
+          "Increase calories 5-10% (carbohydrate priority).",
+          "Reduce training intensity for 48-72 hours."
         ]}
         active={biometrics.interventionTriggered}
       />
@@ -67,7 +72,10 @@ export default async function DashboardPage() {
         <Card withBorder radius="md" padding="lg">
           <Stack gap="sm">
             <Title order={4}>7-day recovery trend</Title>
-            <MiniLineChart points={trend.map((item) => item.hrvMs)} />
+            <MiniLineChart
+              points={trend.map((item) => item.hrvMs)}
+              ariaLabel="Seven day HRV recovery trend chart"
+            />
             <SimpleGrid cols={3}>
               <Stack gap={2}>
                 <Text size="xs" c="dimmed">
@@ -127,6 +135,37 @@ export default async function DashboardPage() {
         </Card>
       </SimpleGrid>
 
+      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>User category snapshot</Title>
+            <Text size="sm" c="dimmed">
+              Training status: {user.userCategory}
+            </Text>
+            <Text size="sm" c="dimmed">
+              Goal: {user.goal.replaceAll("_", " ")} · Sport: {user.sport}
+            </Text>
+            <Text size="sm" c="dimmed">
+              Metabolic flexibility score: {user.metabolicFlexibilityScore}
+            </Text>
+          </Stack>
+        </Card>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>Energy availability guardrail</Title>
+            <Text size="sm" c="dimmed">
+              Clinical threshold: &lt;30 kcal/kg FFM (female), &lt;25 kcal/kg FFM (male).
+            </Text>
+            <Text size="sm" c="dimmed">
+              Subclinical threshold: &lt;45 kcal/kg FFM (female), &lt;40 kcal/kg FFM (male).
+            </Text>
+            <Text size="sm" c="dimmed">
+              Current status: monitor recovery metrics and maintain intake increases.
+            </Text>
+          </Stack>
+        </Card>
+      </SimpleGrid>
+
       <Card withBorder radius="md" padding="lg">
         <Stack gap="sm">
           <Group justify="space-between">
@@ -135,6 +174,9 @@ export default async function DashboardPage() {
           </Group>
           <Text size="sm" c="dimmed">
             {research[0]?.title}
+          </Text>
+          <Text size="sm" c="dimmed">
+            {research[0]?.eli5Summary}
           </Text>
         </Stack>
       </Card>

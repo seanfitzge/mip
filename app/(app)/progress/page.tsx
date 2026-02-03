@@ -3,6 +3,8 @@ import { MiniLineChart } from "@/components/charts/mini-line-chart"
 import { Card, SimpleGrid, Stack, Text, Title } from "@mantine/core"
 
 const weightTrend = [82.5, 82.2, 82.0, 81.9, 81.8, 81.7, 81.7]
+const performanceTrend = [78, 80, 82, 81, 83, 84, 85]
+const adherenceTrend = [92, 88, 90, 94, 91, 93, 95]
 
 export default function ProgressPage() {
   return (
@@ -15,7 +17,7 @@ export default function ProgressPage() {
         <Card withBorder radius="md" padding="lg">
           <Stack gap="sm">
             <Title order={4}>Weight trend</Title>
-            <MiniLineChart points={weightTrend} />
+            <MiniLineChart points={weightTrend} ariaLabel="Seven day weight trend chart" />
             <Text size="sm" c="dimmed">
               Stable weight trend during reverse diet stabilization phase.
             </Text>
@@ -36,10 +38,34 @@ export default function ProgressPage() {
         </Card>
       </SimpleGrid>
 
+      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>Performance trend</Title>
+            <MiniLineChart points={performanceTrend} ariaLabel="Performance trend chart" />
+            <Text size="sm" c="dimmed">
+              Training performance improving as recovery metrics stabilize.
+            </Text>
+          </Stack>
+        </Card>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>Adherence consistency</Title>
+            <MiniLineChart points={adherenceTrend} ariaLabel="Adherence trend chart" />
+            <Text size="sm" c="dimmed">
+              Logging consistency supports accurate TDEE and adaptation modeling.
+            </Text>
+          </Stack>
+        </Card>
+      </SimpleGrid>
+
       <Card withBorder radius="md" padding="lg">
         <Stack gap="sm">
           <Title order={4}>Adaptation curve (preview)</Title>
-          <MiniLineChart points={[100, 96, 94, 93, 92, 92, 93]} />
+          <MiniLineChart
+            points={[100, 96, 94, 93, 92, 92, 93]}
+            ariaLabel="Metabolic adaptation curve preview chart"
+          />
           <Text size="sm" c="dimmed">
             Bayesian TDEE estimates and adaptation curves will appear here once 4+ weeks of
             data are logged.

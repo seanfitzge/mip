@@ -21,6 +21,9 @@ export function ResearchCitation({ paper }: ResearchCitationProps) {
           <Badge variant="outline">Quality {paper.qualityRating}/5</Badge>
           <ConfidenceBadge level={paper.confidenceLevel} />
         </Group>
+        <Text size="xs" c="dimmed">
+          Population: {paper.population} · Topics: {paper.topics.join(", ")}
+        </Text>
         {paper.eli5Summary ? (
           <Text size="sm" c="dimmed">
             {paper.eli5Summary}
