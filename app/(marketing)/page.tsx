@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import { SectionHeader } from "@/components/section-header"
 import { Button, Card, Container, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core"

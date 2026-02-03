@@ -1,3 +1,5 @@
+"use client"
+
 import { Card, List, Stack, Text, Title } from "@mantine/core"
 
 type TimelineItem = {
