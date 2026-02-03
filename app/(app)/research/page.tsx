@@ -2,7 +2,8 @@ import { getResearchPapers } from "@/lib/data/research"
 import { SectionHeader } from "@/components/section-header"
 import { ResearchCitation } from "@/components/research-citation"
 import { ConfidenceBadge } from "@/components/confidence-badge"
-import { Card, SimpleGrid, Stack, Text, TextInput, Title } from "@mantine/core"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 
 const topics = [
   "Protein requirements",
@@ -25,52 +26,64 @@ export default async function ResearchPage() {
   const papers = await getResearchPapers()
 
   return (
-    <Stack gap="xl">
+    <div className="space-y-8">
       <SectionHeader
         title="Research library"
         subtitle="Searchable studies with practical takeaways and citations."
       />
-      <div style={{ maxWidth: 420 }}>
-        <TextInput placeholder="Search studies, topics, or DOI..." />
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="w-full max-w-md">
+          <Input placeholder="Search studies, topics, or DOI..." aria-label="Search studies" />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {["All", "Protein", "Sleep", "HRV", "Metabolism", "Training"].map((filter) => (
+            <button
+              key={filter}
+              className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-mutedForeground hover:bg-muted hover:text-foreground"
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
       </div>
-      <SimpleGrid cols={{ base: 1, lg: 2 }}>
-        <Card withBorder radius="md" padding="lg">
-          <Stack gap="sm">
-            <Title order={4}>Core topics</Title>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="p-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Core topics</h3>
             {topics.map((topic) => (
-              <Text key={topic} size="sm" c="dimmed">
+              <p key={topic} className="text-sm text-mutedForeground">
                 • {topic}
-              </Text>
+              </p>
             ))}
-          </Stack>
+          </div>
         </Card>
-        <Card withBorder radius="md" padding="lg">
-          <Stack gap="sm">
-            <Title order={4}>Evidence confidence legend</Title>
-            <Stack gap={6}>
+        <Card className="p-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Evidence confidence legend</h3>
+            <div className="flex flex-wrap gap-2">
               <ConfidenceBadge level="STRONG" />
               <ConfidenceBadge level="MODERATE" />
               <ConfidenceBadge level="PRELIMINARY" />
               <ConfidenceBadge level="LIMITED" />
-            </Stack>
-          </Stack>
+            </div>
+          </div>
         </Card>
-      </SimpleGrid>
-      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+      </div>
+      <div className="grid gap-4 lg:grid-cols-2">
         {papers.map((paper) => (
           <ResearchCitation key={paper.id} paper={paper} />
         ))}
-      </SimpleGrid>
-      <Card withBorder radius="md" padding="lg">
-        <Stack gap="sm">
-          <Title order={4}>Myth-busting highlights</Title>
+      </div>
+      <Card className="p-4">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold">Myth-busting highlights</h3>
           {myths.map((myth) => (
-            <Text key={myth} size="sm" c="dimmed">
+            <p key={myth} className="text-sm text-mutedForeground">
               • {myth}
-            </Text>
+            </p>
           ))}
-        </Stack>
+        </div>
       </Card>
-    </Stack>
+    </div>
   )
 }

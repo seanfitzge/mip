@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { Anchor, Button, Container, Group, Text } from "@mantine/core"
 
 const navItems = [
   { href: "/vision", label: "Vision" },
@@ -13,31 +12,26 @@ const navItems = [
 export function SiteHeader() {
   return (
     <header>
-      <Container size="lg" py="md">
-        <Group justify="space-between">
-          <Anchor component={Link} href="/" underline="never">
-            <Text fw={700} size="lg">
-              MIP
-            </Text>
-          </Anchor>
-          <Group gap="lg">
+      <div className="container py-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <Link href="/" className="text-lg font-semibold text-foreground">
+            MIP
+          </Link>
+          <div className="flex flex-wrap items-center gap-4 text-sm text-mutedForeground">
             {navItems.map((item) => (
-              <Anchor
-                key={item.href}
-                component={Link}
-                href={item.href}
-                c="dimmed"
-                underline="never"
-              >
+              <Link key={item.href} href={item.href} className="hover:text-foreground">
                 {item.label}
-              </Anchor>
+              </Link>
             ))}
-            <Button component={Link} href="/dashboard" variant="light">
+            <Link
+              href="/dashboard"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 text-sm font-semibold text-primaryForeground transition-colors hover:bg-primary/90 active:bg-primary/85"
+            >
               Join waitlist
-            </Button>
-          </Group>
-        </Group>
-      </Container>
+            </Link>
+          </div>
+        </div>
+      </div>
     </header>
   )
 }

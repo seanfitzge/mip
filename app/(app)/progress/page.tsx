@@ -1,6 +1,6 @@
 import { SectionHeader } from "@/components/section-header"
 import { MiniLineChart } from "@/components/charts/mini-line-chart"
-import { Card, SimpleGrid, Stack, Text, Title } from "@mantine/core"
+import { Card } from "@/components/ui/card"
 
 const weightTrend = [82.5, 82.2, 82.0, 81.9, 81.8, 81.7, 81.7]
 const performanceTrend = [78, 80, 82, 81, 83, 84, 85]
@@ -8,70 +8,73 @@ const adherenceTrend = [92, 88, 90, 94, 91, 93, 95]
 
 export default function ProgressPage() {
   return (
-    <Stack gap="xl">
+    <div className="space-y-8">
       <SectionHeader
         title="Progress tracking"
         subtitle="Weight trends, body composition, and performance notes."
       />
-      <SimpleGrid cols={{ base: 1, lg: 2 }}>
-        <Card withBorder radius="md" padding="lg">
-          <Stack gap="sm">
-            <Title order={4}>Weight trend</Title>
-            <MiniLineChart points={weightTrend} ariaLabel="Seven day weight trend chart" />
-            <Text size="sm" c="dimmed">
-              Stable weight trend during reverse diet stabilization phase.
-            </Text>
-          </Stack>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="p-4">
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Weight trend</h3>
+            <MiniLineChart points={weightTrend} ariaLabel="Seven day weight trend chart" height={120} />
+            <p className="text-sm text-mutedForeground">
+              7-day rolling average with goal line at 82 kg.
+            </p>
+          </div>
         </Card>
-        <Card withBorder radius="md" padding="lg">
-          <Stack gap="sm">
-            <Title order={4}>Progress photos</Title>
-            <Card withBorder radius="md" padding="xl">
-              <Text size="sm" c="dimmed" ta="center">
-                Photo uploads will live here in Phase 2.
-              </Text>
-            </Card>
-            <Text size="sm" c="dimmed">
+        <Card className="p-4">
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Progress photos</h3>
+            <div className="rounded-md border border-dashed border-border p-8 text-center text-sm text-mutedForeground">
+              Photo uploads will live here in Phase 2.
+            </div>
+            <p className="text-sm text-mutedForeground">
               Track weekly photos to validate body composition shifts.
-            </Text>
-          </Stack>
+            </p>
+          </div>
         </Card>
-      </SimpleGrid>
+      </div>
 
-      <SimpleGrid cols={{ base: 1, lg: 2 }}>
-        <Card withBorder radius="md" padding="lg">
-          <Stack gap="sm">
-            <Title order={4}>Performance trend</Title>
-            <MiniLineChart points={performanceTrend} ariaLabel="Performance trend chart" />
-            <Text size="sm" c="dimmed">
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="p-4">
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Performance trend</h3>
+            <MiniLineChart points={performanceTrend} ariaLabel="Performance trend chart" height={120} />
+            <p className="text-sm text-mutedForeground">
               Training performance improving as recovery metrics stabilize.
-            </Text>
-          </Stack>
+            </p>
+          </div>
         </Card>
-        <Card withBorder radius="md" padding="lg">
-          <Stack gap="sm">
-            <Title order={4}>Adherence consistency</Title>
-            <MiniLineChart points={adherenceTrend} ariaLabel="Adherence trend chart" />
-            <Text size="sm" c="dimmed">
+        <Card className="p-4">
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Adherence consistency</h3>
+            <MiniLineChart points={adherenceTrend} ariaLabel="Adherence trend chart" height={120} />
+            <p className="text-sm text-mutedForeground">
               Logging consistency supports accurate TDEE and adaptation modeling.
-            </Text>
-          </Stack>
+            </p>
+          </div>
         </Card>
-      </SimpleGrid>
+      </div>
 
-      <Card withBorder radius="md" padding="lg">
-        <Stack gap="sm">
-          <Title order={4}>Adaptation curve (preview)</Title>
+      <Card className="p-4">
+        <div className="space-y-3">
+          <h3 className="text-lg font-semibold">Adaptation curve (preview)</h3>
           <MiniLineChart
             points={[100, 96, 94, 93, 92, 92, 93]}
             ariaLabel="Metabolic adaptation curve preview chart"
+            height={140}
+            color="rgb(var(--color-info))"
           />
-          <Text size="sm" c="dimmed">
+          <p className="text-sm text-mutedForeground">
             Bayesian TDEE estimates and adaptation curves will appear here once 4+ weeks of
             data are logged.
-          </Text>
-        </Stack>
+          </p>
+          <p className="text-sm text-mutedForeground">
+            Forecasts appear as dashed lines with confidence bands in Phase 3.
+          </p>
+        </div>
       </Card>
-    </Stack>
+    </div>
   )
 }

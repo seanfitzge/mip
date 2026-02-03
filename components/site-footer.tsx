@@ -1,30 +1,28 @@
-import { Container, SimpleGrid, Stack, Text } from "@mantine/core"
-
 export function SiteFooter() {
   return (
     <footer>
-      <Container size="lg" py="xl">
-        <SimpleGrid cols={{ base: 1, sm: 3 }}>
-          <Stack gap={4}>
-            <Text size="sm">Metabolic Intelligence Platform</Text>
-            <Text size="sm" c="dimmed">
+      <div className="container py-10">
+        <div className="grid gap-6 sm:grid-cols-3">
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-foreground">Metabolic Intelligence Platform</p>
+            <p className="text-sm text-mutedForeground">
               Evidence-based nutrition powered by your biometrics.
-            </Text>
-          </Stack>
-          <Stack gap={4}>
-            <Text size="sm">Product</Text>
-            <Text size="sm" c="dimmed">
+            </p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-foreground">Product</p>
+            <p className="text-sm text-mutedForeground">
               Research citations · Recovery-driven nutrition · Reverse diet protocols
-            </Text>
-          </Stack>
-          <Stack gap={4}>
-            <Text size="sm">Compliance</Text>
-            <Text size="sm" c="dimmed">
+            </p>
+          </div>
+          <div className="space-y-2">
+            <p className="text-sm font-semibold text-foreground">Compliance</p>
+            <p className="text-sm text-mutedForeground">
               HIPAA-ready architecture · Encrypted data · User-owned exports
-            </Text>
-          </Stack>
-        </SimpleGrid>
-      </Container>
+            </p>
+          </div>
+        </div>
+      </div>
     </footer>
   )
 }

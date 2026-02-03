@@ -1,4 +1,5 @@
-import { Card, Group, Progress, Stack, Text } from "@mantine/core"
+import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 
 type BaselineStatusCardProps = {
   daysComplete: number
@@ -14,19 +15,25 @@ export function BaselineStatusCard({
   const progress = Math.min((daysComplete / daysRequired) * 100, 100)
 
   return (
-    <Card withBorder radius="md" padding="lg">
-      <Stack gap="sm">
-        <Group justify="space-between">
-          <Text fw={600}>Baseline establishment</Text>
-          <Text size="sm" c={established ? "green" : "dimmed"}>
+    <Card className="p-4">
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-semibold">Baseline establishment</p>
+          <p className={cn("text-sm font-semibold", established ? "text-success" : "text-mutedForeground")}>
             {established ? "Complete" : "In progress"}
-          </Text>
-        </Group>
-        <Progress value={progress} />
-        <Text size="sm" c="dimmed">
+          </p>
+        </div>
+        <div className="h-2 w-full rounded-full bg-muted">
+          <div
+            className="h-2 rounded-full bg-primary"
+            style={{ width: `${progress}%` }}
+            aria-hidden="true"
+          />
+        </div>
+        <p className="text-sm text-mutedForeground">
           {daysComplete} of {daysRequired} days of consistent HRV data collected.
-        </Text>
-      </Stack>
+        </p>
+      </div>
     </Card>
   )
 }

@@ -3,32 +3,59 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --radius: 0.75rem;
+  --color-primary: 0 114 178;
+  --color-success: 0 158 115;
+  --color-warning: 230 159 0;
+  --color-critical: 213 94 0;
+  --color-info: 86 180 233;
+  --color-neutral-700: 51 51 51;
+  --color-neutral-500: 118 118 118;
+  --color-neutral-200: 229 229 229;
+  --color-surface: 255 255 255;
+  --color-background: 245 245 245;
+
+  --color-dm-surface: 26 26 26;
+  --color-dm-background: 18 18 18;
+  --color-dm-text-primary: 229 229 229;
+  --color-dm-text-secondary: 160 160 160;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-metric: 2.5rem;
+  --text-score: 4rem;
+
+  --background: var(--color-background);
+  --foreground: var(--color-neutral-700);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-neutral-700);
+  --muted: 236 236 236;
+  --muted-foreground: var(--color-neutral-500);
+  --primary: var(--color-primary);
+  --primary-foreground: 255 255 255;
+  --border: var(--color-neutral-200);
+  --radius: 0.5rem;
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --border: 217.2 32.6% 17.5%;
+  --background: var(--color-dm-background);
+  --foreground: var(--color-dm-text-primary);
+  --card: var(--color-dm-surface);
+  --card-foreground: var(--color-dm-text-primary);
+  --muted: 34 34 34;
+  --muted-foreground: var(--color-dm-text-secondary);
+  --primary: var(--color-primary);
+  --primary-foreground: 255 255 255;
+  --border: 48 48 48;
 }
 
 body {
   @apply bg-background text-foreground antialiased;
+  font-size: var(--text-base);
+  line-height: 1.6;
 }
 
 .section {
@@ -36,5 +63,18 @@ body {
 }
 
 .container {
-  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  @apply mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-8;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--color-primary));
+  outline-offset: 2px;
+}
+
+.body-text {
+  max-width: 75ch;
+}
+
+.clip-triangle {
+  clip-path: polygon(50% 6%, 96% 92%, 4% 92%);
 }

@@ -1,5 +1,3 @@
-import { LineChart } from "@mantine/charts"
-
 type MiniLineChartProps = {
   points: number[]
   height?: number
@@ -9,28 +7,35 @@ type MiniLineChartProps = {
 
 export function MiniLineChart({
   points,
-  height = 120,
-  color = "indigo.4",
+  height = 40,
+  color = "rgb(var(--color-primary))",
   ariaLabel = "Trend chart"
 }: MiniLineChartProps) {
-  const data = points.map((value, index) => ({
-    day: index + 1,
-    value
-  }))
+  const min = Math.min(...points)
+  const max = Math.max(...points)
+  const range = max - min || 1
+  const viewHeight = 40
+  const viewWidth = 100
+  const step = points.length > 1 ? viewWidth / (points.length - 1) : viewWidth
+
+  const path = points
+    .map((point, index) => {
+      const x = index * step
+      const y = viewHeight - ((point - min) / range) * viewHeight
+      return `${index === 0 ? "M" : "L"} ${x} ${y}`
+    })
+    .join(" ")
 
   return (
     <div role="img" aria-label={ariaLabel}>
-      <LineChart
-        h={height}
-        data={data}
-        dataKey="day"
-        series={[{ name: "value", color }]}
-        withLegend={false}
-        withYAxis={false}
-        withXAxis={false}
-        curveType="monotone"
-        strokeWidth={2}
-      />
+      <svg
+        width="100%"
+        height={height}
+        viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+        preserveAspectRatio="none"
+      >
+        <path d={path} fill="none" stroke={color} strokeWidth="2" />
+      </svg>
     </div>
   )
 }

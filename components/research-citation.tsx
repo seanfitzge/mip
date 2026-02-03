@@ -1,4 +1,5 @@
-import { Badge, Card, Group, List, Stack, Text, Title } from "@mantine/core"
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
 import type { ResearchPaper } from "@/types/research"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 
@@ -7,44 +8,46 @@ type ResearchCitationProps = {
 }
 
 export function ResearchCitation({ paper }: ResearchCitationProps) {
+  const readingLevel = paper.eli5Summary ? "Accessible" : "Technical"
+
   return (
-    <Card withBorder radius="md" padding="lg">
-      <Stack gap="sm">
+    <Card className="p-4">
+      <div className="space-y-3">
         <div>
-          <Title order={5}>{paper.title}</Title>
-          <Text size="xs" c="dimmed">
+          <h3 className="text-lg font-semibold text-foreground">{paper.title}</h3>
+          <p className="text-xs text-mutedForeground">
             {paper.authors} ({paper.year}) · {paper.journal}
-          </Text>
+          </p>
         </div>
-        <Group gap="xs">
-          <Badge variant="light">{paper.studyType}</Badge>
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge variant="muted">{paper.studyType}</Badge>
           <Badge variant="outline">Quality {paper.qualityRating}/5</Badge>
+          <Badge variant="outline">{readingLevel}</Badge>
           <ConfidenceBadge level={paper.confidenceLevel} />
-        </Group>
-        <Text size="xs" c="dimmed">
+        </div>
+        <p className="text-xs text-mutedForeground">
           Population: {paper.population} · Topics: {paper.topics.join(", ")}
-        </Text>
+        </p>
         {paper.eli5Summary ? (
-          <Text size="sm" c="dimmed">
-            {paper.eli5Summary}
-          </Text>
+          <div className="rounded-md bg-muted p-3 text-sm text-foreground">
+            <p className="font-semibold text-foreground">Why this matters</p>
+            <p className="text-sm text-mutedForeground">{paper.eli5Summary}</p>
+          </div>
         ) : null}
-        <List size="sm" spacing="xs">
+        <div className="space-y-1 text-sm text-foreground">
           {paper.keyFindings.map((finding) => (
-            <List.Item key={finding}>{finding}</List.Item>
+            <p key={finding}>• {finding}</p>
           ))}
-        </List>
-        <Text
-          component="a"
+        </div>
+        <a
           href={`https://doi.org/${paper.doi}`}
           target="_blank"
           rel="noreferrer"
-          size="xs"
-          c="indigo.4"
+          className="text-xs font-semibold text-primary"
         >
-          Read full study
-        </Text>
-      </Stack>
+          Read full study →
+        </a>
+      </div>
     </Card>
   )
 }
