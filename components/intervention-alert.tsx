@@ -1,4 +1,4 @@
-import { Badge, Card, Group, List, Stack, Text, Title } from "@mantine/core"
+import { Badge, Card, Group, List, ListItem, Stack, Text, Title } from "@mantine/core"
 
 type InterventionAlertProps = {
   title: string
@@ -40,7 +40,7 @@ export function InterventionAlert({
         {active ? (
           <List size="sm" spacing="xs">
             {details.map((detail) => (
-              <List.Item key={detail}>{detail}</List.Item>
+              <ListItem key={detail}>{detail}</ListItem>
             ))}
           </List>
         ) : (

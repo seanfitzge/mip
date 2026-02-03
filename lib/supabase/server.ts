@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import { createServerClient } from "@supabase/ssr"
 import { getSupabaseEnv } from "@/lib/supabase/env"
+import { getDemoSession } from "@/lib/auth/demo"
 
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies()
@@ -27,7 +28,8 @@ export async function createSupabaseServerClient() {
 export async function getServerSession() {
   const supabase = await createSupabaseServerClient()
   if (!supabase) {
-    return null
+    const cookieStore = await cookies()
+    return getDemoSession(cookieStore)
   }
   const { data } = await supabase.auth.getSession()
   return data.session
