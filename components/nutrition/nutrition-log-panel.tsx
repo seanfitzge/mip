@@ -69,24 +69,31 @@ export function NutritionLogPanel({ macros }: { macros: MacroTargets }) {
 
   const logFood = async (food: FoodResult) => {
     setStatus("Logging meal...")
-    const response = await fetch("/api/v1/nutrition/log-meal", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mealName: food.description,
-        calories: food.calories,
-        proteinG: food.protein,
-        carbsG: food.carbs,
-        fatG: food.fat
+    try {
+      const response = await fetch("/api/v1/nutrition/log-meal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mealName: food.description,
+          calories: food.calories,
+          proteinG: food.protein,
+          carbsG: food.carbs,
+          fatG: food.fat
+        })
       })
-    })
-    if (!response.ok) {
-      setStatus("Failed to log meal.")
-      return
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        setStatus(`Failed to log meal: ${errorData.error || "Unknown error"}`)
+        return
+      }
+      
+      await loadLogs()
+      setStatus("Meal logged successfully!")
+      setTimeout(() => setStatus(null), 2000)
+    } catch (error) {
+      setStatus(`Error: ${error instanceof Error ? error.message : "Unknown error"}`)
     }
-    await loadLogs()
-    setStatus("Logged.")
-    setTimeout(() => setStatus(null), 1500)
   }
 
   const quickFavorites = [
@@ -99,24 +106,31 @@ export function NutritionLogPanel({ macros }: { macros: MacroTargets }) {
 
   const logQuickFood = async (food: typeof quickFavorites[0]) => {
     setStatus("Logging meal...")
-    const response = await fetch("/api/v1/nutrition/log-meal", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        mealName: food.name,
-        calories: food.calories,
-        proteinG: food.protein,
-        carbsG: food.carbs,
-        fatG: food.fat
+    try {
+      const response = await fetch("/api/v1/nutrition/log-meal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mealName: food.name,
+          calories: food.calories,
+          proteinG: food.protein,
+          carbsG: food.carbs,
+          fatG: food.fat
+        })
       })
-    })
-    if (!response.ok) {
-      setStatus("Failed to log meal.")
-      return
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        setStatus(`Failed to log meal: ${errorData.error || "Unknown error"}`)
+        return
+      }
+      
+      await loadLogs()
+      setStatus("Meal logged successfully!")
+      setTimeout(() => setStatus(null), 2000)
+    } catch (error) {
+      setStatus(`Error: ${error instanceof Error ? error.message : "Unknown error"}`)
     }
-    await loadLogs()
-    setStatus("Logged.")
-    setTimeout(() => setStatus(null), 1500)
   }
 
   return (

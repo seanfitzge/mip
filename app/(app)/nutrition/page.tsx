@@ -1,18 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { SectionHeader } from "@/components/section-header"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 import { Card } from "@/components/ui/card"
-import { MacroCalculatorForm } from "@/components/nutrition/macro-calculator-form"
+import { Button } from "@/components/ui/button"
 import { NutritionLogPanel } from "@/components/nutrition/nutrition-log-panel"
-import { DietPhaseQuestionnaire, type DietPhaseInfo } from "@/components/nutrition/diet-phase-questionnaire"
 import type { MacroTargets } from "@/types/macros"
 
 export default function NutritionPage() {
   const [macros, setMacros] = useState<MacroTargets | null>(null)
-  const [dietPhaseInfo, setDietPhaseInfo] = useState<DietPhaseInfo | null>(null)
-  const [showQuestionnaire, setShowQuestionnaire] = useState(false)
   const [hasTargets, setHasTargets] = useState(false)
   const [loading, setLoading] = useState(true)
 
@@ -25,39 +23,21 @@ export default function NutritionPage() {
       const response = await fetch("/api/v1/nutrition/targets/current")
       if (response.ok) {
         const data = await response.json()
-        // Check if we got valid macro data (not null and has calories)
         if (data && data.calories && data.calories > 0) {
           setMacros(data)
           setHasTargets(true)
-          setShowQuestionnaire(false)
         } else {
-          // No targets found, show questionnaire
           setHasTargets(false)
-          setShowQuestionnaire(true)
         }
       } else {
         setHasTargets(false)
-        setShowQuestionnaire(true)
       }
     } catch (error) {
       console.error("Error loading macros:", error)
       setHasTargets(false)
-      setShowQuestionnaire(true)
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleQuestionnaireComplete = (info: DietPhaseInfo) => {
-    setDietPhaseInfo(info)
-    setShowQuestionnaire(false)
-  }
-
-  const handleTargetsSaved = async () => {
-    // Reload macros to show the newly saved targets
-    // Add a small delay to ensure database write has propagated
-    await new Promise(resolve => setTimeout(resolve, 300))
-    await loadMacros()
   }
 
   // Use default macros if none loaded yet
@@ -83,73 +63,76 @@ export default function NutritionPage() {
         <Card className="p-4">
           <p className="text-sm text-mutedForeground">Loading...</p>
         </Card>
-      ) : showQuestionnaire && !hasTargets ? (
-        <DietPhaseQuestionnaire onComplete={handleQuestionnaireComplete} />
       ) : hasTargets && displayMacros.calories > 0 ? (
-        <div className="grid gap-4 lg:grid-cols-2">
-          <Card className="p-4">
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold">Today&apos;s targets</h3>
+        <Card className="p-4">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Today&apos;s targets</h3>
+              <div className="flex items-center gap-3">
                 <ConfidenceBadge level={displayMacros.confidenceLevel} />
+                <Link href="/settings">
+                  <Button variant="ghost" className="h-9 px-3 text-xs">
+                    Update targets
+                  </Button>
+                </Link>
               </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
-                    Calories
-                  </p>
-                  <p className="text-2xl font-bold text-foreground">{displayMacros.calories}</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
-                    Protein
-                  </p>
-                  <p className="text-2xl font-bold text-foreground">{displayMacros.proteinG} g</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
-                    Carbs
-                  </p>
-                  <p className="text-2xl font-bold text-foreground">{displayMacros.carbsG} g</p>
-                </div>
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
-                    Fat
-                  </p>
-                  <p className="text-2xl font-bold text-foreground">{displayMacros.fatG} g</p>
-                </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Calories
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.calories}</p>
               </div>
-              {displayMacros.adjustmentReason && (
-                <p className="text-sm text-mutedForeground">{displayMacros.adjustmentReason}</p>
-              )}
-              {displayMacros.proteinCitationDoi && (
-                <div className="flex flex-wrap gap-3 text-xs text-primary">
-                  <a href={`https://doi.org/${displayMacros.proteinCitationDoi}`} target="_blank" rel="noreferrer">
-                    Protein DOI
-                  </a>
-                  <a href={`https://doi.org/${displayMacros.carbCitationDoi}`} target="_blank" rel="noreferrer">
-                    Carb DOI
-                  </a>
-                  <a href={`https://doi.org/${displayMacros.fatCitationDoi}`} target="_blank" rel="noreferrer">
-                    Fat DOI
-                  </a>
-                </div>
-              )}
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Protein
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.proteinG} g</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Carbs
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.carbsG} g</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Fat
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.fatG} g</p>
+              </div>
             </div>
-          </Card>
-
-          <Card className="p-4">
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">Macro calculator</h3>
-              <MacroCalculatorForm dietPhaseInfo={dietPhaseInfo ?? undefined} onTargetsSaved={handleTargetsSaved} />
-            </div>
-          </Card>
-        </div>
+            {displayMacros.adjustmentReason && (
+              <p className="text-sm text-mutedForeground">{displayMacros.adjustmentReason}</p>
+            )}
+            {displayMacros.proteinCitationDoi && (
+              <div className="flex flex-wrap gap-3 text-xs text-primary">
+                <a href={`https://doi.org/${displayMacros.proteinCitationDoi}`} target="_blank" rel="noreferrer">
+                  Protein DOI
+                </a>
+                <a href={`https://doi.org/${displayMacros.carbCitationDoi}`} target="_blank" rel="noreferrer">
+                  Carb DOI
+                </a>
+                <a href={`https://doi.org/${displayMacros.fatCitationDoi}`} target="_blank" rel="noreferrer">
+                  Fat DOI
+                </a>
+              </div>
+            )}
+          </div>
+        </Card>
       ) : (
         <Card className="p-4">
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold">Macro calculator</h3>
-            <MacroCalculatorForm dietPhaseInfo={dietPhaseInfo ?? undefined} onTargetsSaved={handleTargetsSaved} />
+            <h3 className="text-lg font-semibold">No targets set</h3>
+            <p className="text-sm text-mutedForeground">
+              Set your nutrition targets in settings to start tracking your macros.
+            </p>
+            <Link href="/settings">
+              <Button className="h-10 px-4">
+                Go to Settings
+              </Button>
+            </Link>
           </div>
         </Card>
       )}

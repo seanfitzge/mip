@@ -9,7 +9,8 @@ const navItems = [
   { href: "/biometrics", label: "Biometrics" },
   { href: "/research", label: "Research Library" },
   { href: "/protocols", label: "Protocol Manager" },
-  { href: "/progress", label: "Progress" }
+  { href: "/progress", label: "Progress" },
+  { href: "/settings", label: "Settings" }
 ]
 
 export function AppSidebar() {
