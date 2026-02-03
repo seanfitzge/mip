@@ -48,14 +48,24 @@ export default async function DashboardPage() {
       />
       
       {/* Recovery Score Hero Metric */}
-      <Card className="p-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="text-score font-bold tracking-[0.02em] text-foreground">
-            {biometrics.readinessScore}
+      <Card className="p-10 relative overflow-hidden border-2 border-electricBlue/20">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-mesh opacity-20" />
+        
+        <div className="relative z-10 flex flex-col items-center justify-center space-y-6 text-center">
+          <div className="relative">
+            {/* Pulsing background */}
+            <div className="absolute inset-0 -m-8 bg-gradient-primary blur-3xl opacity-30 animate-pulse-glow" />
+            
+            {/* Score */}
+            <div className="relative text-score font-bold tracking-tighter">
+              <span className="text-gradient">{biometrics.readinessScore}</span>
+            </div>
           </div>
-          <div className="space-y-2">
+          
+          <div className="space-y-3">
             <StatusBadge status={recoveryStatus} />
-            <p className="text-base text-mutedForeground">
+            <p className="text-lg text-ghost/80 font-mono max-w-md">
               {recoveryStatus === "optimal"
                 ? "Ready for high-intensity training"
                 : recoveryStatus === "good"
@@ -199,34 +209,45 @@ export default async function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="p-4">
-          <div className="space-y-3">
+        <Card className="p-6 border-t-4 border-t-neonCyan">
+          <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Today&apos;s macro targets</h3>
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <span className="text-neonCyan">◈</span>
+                Today&apos;s macro targets
+              </h3>
               <ConfidenceBadge level={macros.confidenceLevel} />
             </div>
-            <div className="text-2xl font-bold text-foreground">{macros.calories} kcal</div>
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+            
+            <div className="text-4xl font-bold font-mono">
+              <span className="text-gradient">{macros.calories}</span>
+              <span className="text-sm text-ghost/40 ml-2">kcal</span>
+            </div>
+            
+            <div className="grid grid-cols-3 gap-4">
+              <div className="glass rounded-lg p-3 border border-border/30">
+                <p className="text-xs font-mono font-semibold uppercase tracking-ultra text-ghost/50 mb-1">
                   Protein
                 </p>
-                <p className="text-sm font-semibold text-foreground">{macros.proteinG} g</p>
+                <p className="text-xl font-bold font-mono text-laserGreen">{macros.proteinG}g</p>
               </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+              <div className="glass rounded-lg p-3 border border-border/30">
+                <p className="text-xs font-mono font-semibold uppercase tracking-ultra text-ghost/50 mb-1">
                   Carbs
                 </p>
-                <p className="text-sm font-semibold text-foreground">{macros.carbsG} g</p>
+                <p className="text-xl font-bold font-mono text-electricBlue">{macros.carbsG}g</p>
               </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+              <div className="glass rounded-lg p-3 border border-border/30">
+                <p className="text-xs font-mono font-semibold uppercase tracking-ultra text-ghost/50 mb-1">
                   Fat
                 </p>
-                <p className="text-sm font-semibold text-foreground">{macros.fatG} g</p>
+                <p className="text-xl font-bold font-mono text-plasmaPink">{macros.fatG}g</p>
               </div>
             </div>
-            <p className="text-sm text-mutedForeground">{macros.adjustmentReason}</p>
+            
+            <div className="glass rounded-lg p-3 border border-neonCyan/20">
+              <p className="text-xs font-mono text-ghost/70">{macros.adjustmentReason}</p>
+            </div>
           </div>
         </Card>
       </div>
