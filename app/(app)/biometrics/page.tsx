@@ -5,6 +5,9 @@ import { HrvTrendChart } from "@/components/charts/hrv-trend-chart"
 import { SleepTimelineChart } from "@/components/charts/sleep-timeline-chart"
 import { Card } from "@/components/ui/card"
 import { BaselineActions } from "@/components/biometrics/baseline-actions"
+import { ManualMetricsForm } from "@/components/biometrics/manual-metrics-form"
+import { DeviceGuide } from "@/components/biometrics/device-guide"
+import { BaselineStatus } from "@/components/biometrics/baseline-status"
 
 export default async function BiometricsPage() {
   const summary = await getBiometricsSummary()
@@ -16,6 +19,24 @@ export default async function BiometricsPage() {
         title="Biometrics"
         subtitle="Recovery metrics used to adjust nutrition targets."
       />
+
+      {/* Baseline Status */}
+      <BaselineStatus
+        baselineEstablished={summary.baselineEstablished}
+        baselineDaysComplete={summary.baselineDaysComplete}
+        baselineDaysRequired={summary.baselineDaysRequired}
+        baselineHrvMean={summary.hrvBaselineMean}
+        baselineHrvSd={summary.hrvBaselineSd}
+        baselineRhrMean={summary.rhrBaselineMean}
+        baselineRhrSd={summary.rhrBaselineSd}
+      />
+
+      {/* Manual Metrics Input and Device Guide */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <ManualMetricsForm />
+        <DeviceGuide />
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="p-4 lg:col-span-2">
           <div className="space-y-3">
@@ -151,6 +172,74 @@ export default async function BiometricsPage() {
           </p>
         </div>
       </Card>
+
+      {/* Historical Data Table */}
+      <div>
+        <h3 className="mb-4 text-lg font-semibold">Historical Data (Last 14 Days)</h3>
+        <Card className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="border-b bg-muted/50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">Date</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold">HRV (ms)</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold">RHR (bpm)</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold">Sleep (hrs)</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold">Sleep Quality</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {trend.length > 0 ? (
+                  trend
+                    .slice()
+                    .reverse()
+                    .map((row, index) => {
+                      const isRecent = index < 3
+                      return (
+                        <tr
+                          key={row.date}
+                          className={`hover:bg-muted/30 ${isRecent ? "font-medium" : ""}`}
+                        >
+                          <td className="px-4 py-3 text-sm">
+                            {new Date(row.date).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric"
+                            })}
+                          </td>
+                          <td className="px-4 py-3 text-right text-sm">{row.hrvMs.toFixed(1)}</td>
+                          <td className="px-4 py-3 text-right text-sm">{row.restingHrBpm}</td>
+                          <td className="px-4 py-3 text-right text-sm">
+                            {row.sleepDurationHours.toFixed(1)}
+                          </td>
+                          <td className="px-4 py-3 text-right text-sm">
+                            <span
+                              className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+                                row.sleepQuality >= 80
+                                  ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200"
+                                  : row.sleepQuality >= 70
+                                    ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-200"
+                                    : "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200"
+                              }`}
+                            >
+                              {row.sleepQuality}/100
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    })
+                ) : (
+                  <tr>
+                    <td colSpan={5} className="px-4 py-8 text-center text-sm text-mutedForeground">
+                      No historical data yet. Start logging your daily metrics above.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </Card>
+      </div>
     </div>
   )
 }
