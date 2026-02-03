@@ -67,6 +67,7 @@ export async function getBiometricsSummary(): Promise<BiometricsSummary> {
     restingHrBpm: Number(latest.resting_hr_bpm ?? 0),
     sleepQuality: Number(latest.sleep_quality_score ?? 0),
     sleepDurationHours: Number(latest.sleep_duration_hrs ?? 0),
+    sleepEfficiencyPercent: latest.sleep_efficiency_percent ? Number(latest.sleep_efficiency_percent) : undefined,
     readinessScore: Number(latest.readiness_score ?? 0),
     recoveryGrade: evaluation.recoveryGrade,
     interventionTriggered: evaluation.triggered,

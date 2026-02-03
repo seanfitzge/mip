@@ -2,6 +2,7 @@ import { getBiometricsSummary, getBiometricsTrend } from "@/lib/data/biometrics"
 import { SectionHeader } from "@/components/section-header"
 import { MiniLineChart } from "@/components/charts/mini-line-chart"
 import { HrvTrendChart } from "@/components/charts/hrv-trend-chart"
+import { SleepTimelineChart } from "@/components/charts/sleep-timeline-chart"
 import { Card } from "@/components/ui/card"
 import { BaselineActions } from "@/components/biometrics/baseline-actions"
 
@@ -49,9 +50,30 @@ export default async function BiometricsPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
+        <Card className="p-4 lg:col-span-2">
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">Previous night sleep stages</h3>
+            <SleepTimelineChart
+              stages={[
+                { stage: "deep", startMinutes: 0, durationMinutes: 90 },
+                { stage: "light", startMinutes: 90, durationMinutes: 120 },
+                { stage: "rem", startMinutes: 210, durationMinutes: 60 },
+                { stage: "light", startMinutes: 270, durationMinutes: 180 },
+                { stage: "deep", startMinutes: 450, durationMinutes: 60 },
+                { stage: "light", startMinutes: 510, durationMinutes: 90 },
+                { stage: "rem", startMinutes: 600, durationMinutes: 45 }
+              ]}
+              totalDurationHours={summary.sleepDurationHours}
+              efficiencyPercent={summary.sleepEfficiencyPercent}
+            />
+            <p className="text-sm text-mutedForeground">
+              Sleep score {summary.sleepQuality}/100 · Duration {summary.sleepDurationHours} hrs
+            </p>
+          </div>
+        </Card>
         <Card className="p-4">
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold">Sleep quality</h3>
+            <h3 className="text-lg font-semibold">Sleep quality trend</h3>
             <MiniLineChart
               points={trend.map((item) => item.sleepQuality)}
               ariaLabel="Sleep quality trend chart"
@@ -59,8 +81,7 @@ export default async function BiometricsPage() {
               color="rgb(var(--color-info))"
             />
             <p className="text-sm text-mutedForeground">
-              Sleep score {summary.sleepQuality}/100 with {summary.sleepDurationHours} hrs
-              last night.
+              7-day average: {Math.round(trend.reduce((sum, item) => sum + item.sleepQuality, 0) / trend.length)}/100
             </p>
           </div>
         </Card>

@@ -1,4 +1,6 @@
-import { Badge, Card, Group, List, ListItem, Stack, Text, Title } from "@mantine/core"
+import { Card } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 type InterventionAlertProps = {
   title: string
@@ -7,48 +9,71 @@ type InterventionAlertProps = {
   severity?: "warning" | "critical" | "info"
 }
 
+const severityStyles = {
+  critical: {
+    border: "border-l-critical",
+    bg: "bg-critical/10",
+    icon: "!",
+    label: "Critical"
+  },
+  warning: {
+    border: "border-l-warning",
+    bg: "bg-warning/10",
+    icon: "⚠",
+    label: "Warning"
+  },
+  info: {
+    border: "border-l-info",
+    bg: "bg-info/10",
+    icon: "i",
+    label: "Info"
+  }
+}
+
 export function InterventionAlert({
   title,
   details,
   active,
   severity = "warning"
 }: InterventionAlertProps) {
-  const borderColor = !active
-    ? undefined
-    : severity === "critical"
-      ? "var(--mantine-color-red-6)"
-      : severity === "warning"
-        ? "var(--mantine-color-yellow-6)"
-        : "var(--mantine-color-indigo-6)"
+  const style = severityStyles[severity]
 
   return (
     <Card
-      withBorder
-      radius="md"
-      padding="lg"
-      style={{
-        borderColor
-      }}
+      className={cn(
+        "border-l-4 p-4",
+        active && style.border,
+        active && style.bg
+      )}
+      aria-live={active ? "polite" : undefined}
+      role="alert"
     >
-      <Stack gap="sm">
-        <Group justify="space-between">
-          <Title order={4}>{title}</Title>
-          <Badge variant="light" color={active ? "red" : "teal"}>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {active && (
+              <span className="text-sm font-semibold text-foreground" aria-hidden="true">
+                {style.icon}
+              </span>
+            )}
+            <h3 className="text-lg font-semibold">{title}</h3>
+          </div>
+          <Badge variant={active ? "default" : "secondary"}>
             {active ? "Active" : "Monitoring"}
           </Badge>
-        </Group>
+        </div>
         {active ? (
-          <List size="sm" spacing="xs">
-            {details.map((detail) => (
-              <ListItem key={detail}>{detail}</ListItem>
+          <ul className="space-y-1 text-sm text-mutedForeground">
+            {details.map((detail, index) => (
+              <li key={index}>• {detail}</li>
             ))}
-          </List>
+          </ul>
         ) : (
-          <Text size="sm" c="dimmed">
+          <p className="text-sm text-mutedForeground">
             No current interventions. Biometrics remain within baseline thresholds.
-          </Text>
+          </p>
         )}
-      </Stack>
+      </div>
     </Card>
   )
 }

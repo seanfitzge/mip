@@ -23,6 +23,7 @@ export const mockBiometricsSummary: BiometricsSummary = {
   restingHrBpm: 60,
   sleepQuality: 68,
   sleepDurationHours: 6.6,
+  sleepEfficiencyPercent: 82,
   readinessScore: 62,
   recoveryGrade: "fair",
   interventionTriggered: true,

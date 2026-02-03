@@ -28,7 +28,9 @@ export function FormField({
         id={fieldId}
         aria-invalid={Boolean(errorText)}
         aria-describedby={descriptionId}
+        aria-required={props.required}
         className={cn(
+          "min-h-[44px]",
           errorText && "border-critical focus-visible:border-critical focus-visible:ring-critical/20",
           className
         )}

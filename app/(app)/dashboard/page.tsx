@@ -46,6 +46,28 @@ export default async function DashboardPage() {
         title="Daily snapshot"
         subtitle="Biometric recovery signals and adaptive nutrition targets."
       />
+      
+      {/* Recovery Score Hero Metric */}
+      <Card className="p-6">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="text-score font-bold tracking-[0.02em] text-foreground">
+            {biometrics.readinessScore}
+          </div>
+          <div className="space-y-2">
+            <StatusBadge status={recoveryStatus} />
+            <p className="text-base text-mutedForeground">
+              {recoveryStatus === "optimal"
+                ? "Ready for high-intensity training"
+                : recoveryStatus === "good"
+                  ? "Ready for moderate training"
+                  : recoveryStatus === "moderate"
+                    ? "Recovery recommended"
+                    : "Prioritize recovery"}
+            </p>
+          </div>
+        </div>
+      </Card>
+
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <StatCard
           title="HRV"
@@ -98,7 +120,10 @@ export default async function DashboardPage() {
             <p className="text-sm text-mutedForeground">
               Data source: {biometrics.sourceDevice} (CCC {biometrics.deviceAccuracyCcc})
             </p>
-            <button className="text-sm font-semibold text-primary">
+            <button
+              className="text-sm font-semibold text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              aria-label="Learn how recovery grade is calculated"
+            >
               How is this calculated?
             </button>
           </div>
@@ -110,22 +135,29 @@ export default async function DashboardPage() {
         />
       </div>
 
-      <InterventionAlert
-        title="Recovery intervention triggered"
-        details={[
-          ...intervention.reasons,
-          "Reduce training intensity for 48-72 hours."
-        ]}
-        active={biometrics.interventionTriggered}
-        severity="warning"
-      />
+      <div aria-live="polite" aria-atomic="true">
+        <InterventionAlert
+          title="Recovery intervention triggered"
+          details={[
+            ...intervention.reasons,
+            "Reduce training intensity for 48-72 hours."
+          ]}
+          active={biometrics.interventionTriggered}
+          severity="warning"
+        />
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="p-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">7-day HRV trend</h3>
-              <button className="text-sm font-semibold text-primary">Full view →</button>
+              <button
+                className="text-sm font-semibold text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                aria-label="View full HRV trend chart"
+              >
+                Full view →
+              </button>
             </div>
             <HrvTrendChart
               trend={trend.map((item) => ({ date: item.date, hrvMs: item.hrvMs }))}
@@ -226,9 +258,12 @@ export default async function DashboardPage() {
             <p className="text-sm text-mutedForeground">
               Current status: monitor recovery metrics and maintain intake increases.
             </p>
-            <button className="text-sm font-semibold text-primary">
-              When to consult a healthcare provider
-            </button>
+          <button
+            className="text-sm font-semibold text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            aria-label="Learn when to consult a healthcare provider about energy availability"
+          >
+            When to consult a healthcare provider
+          </button>
           </div>
         </Card>
       </div>
@@ -250,7 +285,12 @@ export default async function DashboardPage() {
               />
             </span>
           </p>
-          <button className="text-sm font-semibold text-primary">View full analysis</button>
+          <button
+            className="text-sm font-semibold text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            aria-label="View full recovery analysis"
+          >
+            View full analysis
+          </button>
         </div>
       </Card>
 

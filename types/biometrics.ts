@@ -3,6 +3,7 @@ export type BiometricsSummary = {
   restingHrBpm: number
   sleepQuality: number
   sleepDurationHours: number
+  sleepEfficiencyPercent?: number
   readinessScore: number
   recoveryGrade: "optimal" | "good" | "fair" | "poor"
   interventionTriggered: boolean
