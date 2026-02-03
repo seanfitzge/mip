@@ -19,7 +19,7 @@ export function AppSidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="hidden min-h-screen w-72 border-r border-border/30 glass px-6 py-8 md:flex md:flex-col relative overflow-hidden">
+    <aside className="hidden min-h-screen w-64 lg:w-72 border-r border-border/30 glass px-4 lg:px-6 py-6 lg:py-8 md:flex md:flex-col relative overflow-hidden">
       {/* Animated gradient background */}
       <motion.div
         animate={{ 

@@ -129,7 +129,7 @@ export default function HomePage() {
     <>
       {/* Hero Section - Experimental Design */}
       <motion.section
-        className="relative section min-h-screen flex items-center overflow-hidden"
+        className="relative section min-h-[90vh] lg:min-h-screen flex items-center overflow-hidden py-12"
         initial="hidden"
         animate={shouldAnimate ? "visible" : "hidden"}
         variants={fadeInUp}

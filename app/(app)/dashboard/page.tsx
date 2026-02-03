@@ -48,24 +48,24 @@ export default async function DashboardPage() {
       />
       
       {/* Recovery Score Hero Metric */}
-      <Card className="p-10 relative overflow-hidden border-2 border-electricBlue/20">
+      <Card className="p-6 sm:p-8 lg:p-10 relative overflow-hidden border-2 border-electricBlue/20">
         {/* Animated gradient background */}
         <div className="absolute inset-0 bg-gradient-mesh opacity-20" />
         
-        <div className="relative z-10 flex flex-col items-center justify-center space-y-6 text-center">
+        <div className="relative z-10 flex flex-col items-center justify-center space-y-4 sm:space-y-6 text-center">
           <div className="relative">
             {/* Pulsing background */}
-            <div className="absolute inset-0 -m-8 bg-gradient-primary blur-3xl opacity-30 animate-pulse-glow" />
+            <div className="absolute inset-0 -m-4 sm:-m-8 bg-gradient-primary blur-3xl opacity-30 animate-pulse-glow" />
             
-            {/* Score */}
-            <div className="relative text-score font-bold tracking-tighter">
+            {/* Score - Responsive sizing */}
+            <div className="relative text-6xl sm:text-7xl lg:text-score font-bold tracking-tighter">
               <span className="text-gradient">{biometrics.readinessScore}</span>
             </div>
           </div>
           
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             <StatusBadge status={recoveryStatus} />
-            <p className="text-lg text-ghost/80 font-mono max-w-md">
+            <p className="text-sm sm:text-base lg:text-lg text-ghost/80 font-mono max-w-md px-4">
               {recoveryStatus === "optimal"
                 ? "Ready for high-intensity training"
                 : recoveryStatus === "good"

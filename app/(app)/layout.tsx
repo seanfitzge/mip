@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AppTopbar } from "@/components/app-topbar"
+import { DailyMetricsWrapper } from "@/components/daily-metrics-wrapper"
 import { getServerSession } from "@/lib/supabase/server"
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
@@ -11,6 +12,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Daily Metrics System */}
+      <DailyMetricsWrapper />
+
       <div className="flex">
         <AppSidebar />
         <div className="flex-1">

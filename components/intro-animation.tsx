@@ -68,7 +68,7 @@ export function IntroAnimation() {
             className="absolute inset-0 grid-pattern"
           />
 
-          <div className="relative z-10 text-center px-8">
+          <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
             {/* Main logo - Geometric abstract shape */}
             <motion.div
               initial={{ scale: 0.8, opacity: 0, rotateZ: -10 }}
@@ -77,7 +77,7 @@ export function IntroAnimation() {
                 duration: 0.8,
                 ease: [0.34, 1.56, 0.64, 1],
               }}
-              className="relative mx-auto w-32 h-32 mb-8"
+              className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28 lg:w-32 lg:h-32 mb-6 sm:mb-8"
             >
               {/* Rotating outer ring */}
               <motion.div
@@ -200,10 +200,10 @@ export function IntroAnimation() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: stage >= 2 ? 1 : 0, y: stage >= 2 ? 0 : 20 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="space-y-4"
+              className="space-y-3 sm:space-y-4"
             >
               <motion.h1
-                className="text-5xl font-bold tracking-tighter"
+                className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tighter"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: stage >= 2 ? 1 : 0, y: stage >= 2 ? 0 : 10 }}
                 transition={{ duration: 0.6, ease: "easeOut", delay: 1.4 }}

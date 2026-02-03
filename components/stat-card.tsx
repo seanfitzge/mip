@@ -49,7 +49,7 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <Card className={cn(
-      "p-6 relative overflow-hidden group",
+      "p-4 sm:p-5 lg:p-6 relative overflow-hidden group",
       borderTones[statusTone],
       glowTones[statusTone]
     )}>
@@ -76,7 +76,7 @@ export function StatCard({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="text-metric font-bold tracking-tighter"
+          className="text-2xl sm:text-3xl lg:text-metric font-bold tracking-tighter"
         >
           <span className="text-gradient">{value}</span>
         </motion.div>
