@@ -2,7 +2,7 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "ghost"
+  variant?: "primary" | "secondary" | "ghost" | "outline"
 }
 
 export function Button({ className, variant = "primary", ...props }: ButtonProps) {
@@ -18,6 +18,8 @@ export function Button({ className, variant = "primary", ...props }: ButtonProps
           "bg-muted text-foreground hover:bg-muted/80 active:bg-muted/70",
         variant === "ghost" &&
           "bg-transparent text-foreground hover:bg-muted active:bg-muted/70",
+        variant === "outline" &&
+          "border border-border bg-background text-foreground hover:bg-muted active:bg-muted/70",
         className
       )}
       {...props}
