@@ -8,16 +8,15 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { FormField } from "@/components/ui/form-field"
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [status, setStatus] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [demoLoading, setDemoLoading] = useState(false)
   const [resending, setResending] = useState(false)
 
-  const handlePasswordSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setLoading(true)
     setStatus(null)
@@ -28,33 +27,9 @@ export default function SignInPage() {
       return
     }
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signUp({
       email,
-      password
-    })
-
-    if (error) {
-      setStatus(error.message)
-      setLoading(false)
-      return
-    }
-
-    router.push("/dashboard")
-    router.refresh()
-  }
-
-  const handleMagicLink = async () => {
-    setLoading(true)
-    setStatus(null)
-    const supabase = createSupabaseBrowserClient()
-    if (!supabase) {
-      setStatus("Supabase environment variables are missing.")
-      setLoading(false)
-      return
-    }
-
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
+      password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`
       }
@@ -62,9 +37,11 @@ export default function SignInPage() {
 
     if (error) {
       setStatus(error.message)
-    } else {
-      setStatus("Magic link sent. Check your inbox to finish signing in.")
+      setLoading(false)
+      return
     }
+
+    setStatus("Check your inbox to confirm your email. Then sign in.")
     setLoading(false)
   }
 
@@ -93,33 +70,19 @@ export default function SignInPage() {
     setResending(false)
   }
 
-  const handleDemoMode = async () => {
-    setDemoLoading(true)
-    setStatus(null)
-    const response = await fetch("/api/auth/demo/login", { method: "POST" })
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}))
-      setStatus(data.error ?? "Demo mode unavailable.")
-      setDemoLoading(false)
-      return
-    }
-    router.push("/dashboard")
-    router.refresh()
-  }
-
   return (
     <Card className="p-8">
       <div className="space-y-2">
         <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
           MIP Console
         </p>
-        <h1 className="text-2xl font-semibold text-foreground">Sign in</h1>
+        <h1 className="text-2xl font-semibold text-foreground">Create your account</h1>
         <p className="text-sm text-mutedForeground">
-          Access your metabolic intelligence dashboard and recovery insights.
+          Set up your baseline and start tracking recovery-informed nutrition.
         </p>
       </div>
 
-      <form onSubmit={handlePasswordSignIn} className="mt-6 space-y-4">
+      <form onSubmit={handleSignUp} className="mt-6 space-y-4">
         <FormField
           label="Email"
           type="email"
@@ -132,51 +95,31 @@ export default function SignInPage() {
         <FormField
           label="Password"
           type="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
+          autoComplete="new-password"
+          placeholder="Create a password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
           required
         />
         {status ? <p className="text-sm text-mutedForeground">{status}</p> : null}
-        <div className="space-y-2">
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            className="w-full"
-            onClick={handleMagicLink}
-            disabled={loading || !email}
-          >
-            Send magic link
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            className="w-full"
-            onClick={handleResend}
-            disabled={resending || !email}
-          >
-            {resending ? "Resending..." : "Resend confirmation email"}
-          </Button>
-        </div>
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Creating account..." : "Create account"}
+        </Button>
         <Button
           type="button"
-          variant="ghost"
+          variant="secondary"
           className="w-full"
-          onClick={handleDemoMode}
-          disabled={demoLoading}
+          onClick={handleResend}
+          disabled={resending}
         >
-          {demoLoading ? "Starting demo..." : "Continue in demo mode"}
+          {resending ? "Resending..." : "Resend confirmation"}
         </Button>
       </form>
 
       <div className="mt-6 text-sm text-mutedForeground">
-        New here?{" "}
-        <Link className="font-semibold text-primary" href="/sign-up">
-          Create an account
+        Already have an account?{" "}
+        <Link className="font-semibold text-primary" href="/sign-in">
+          Sign in
         </Link>
         .
       </div>

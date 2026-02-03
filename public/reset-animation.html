@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Animation - MIP</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #121212;
+      color: #e5e5e5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 500px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: rgb(0, 114, 178);
+    }
+    p {
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+      color: #a0a0a0;
+    }
+    button {
+      background: rgb(0, 114, 178);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 0.5rem;
+    }
+    button:hover {
+      background: rgb(0, 130, 200);
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    .secondary {
+      background: transparent;
+      border: 2px solid rgb(0, 114, 178);
+      color: rgb(0, 114, 178);
+    }
+    .secondary:hover {
+      background: rgba(0, 114, 178, 0.1);
+    }
+    .status {
+      margin-top: 2rem;
+      padding: 1rem;
+      background: rgba(0, 158, 115, 0.1);
+      border-radius: 0.5rem;
+      color: rgb(0, 158, 115);
+      display: none;
+    }
+    .status.show {
+      display: block;
+    }
+    code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Animation Reset Tool</h1>
+    <p>
+      Use this page to reset the first-time animation. After clicking the button,
+      navigate back to the home page to see the animation again.
+    </p>
+    
+    <button onclick="resetAnimation()">Reset Animation</button>
+    <button class="secondary" onclick="goHome()">Go to Home</button>
+    
+    <div class="status" id="status">
+      ✓ Animation reset! Navigate to the home page to see it again.
+    </div>
+    
+    <p style="margin-top: 2rem; font-size: 0.875rem;">
+      <strong>Manual Method:</strong><br>
+      Open browser console (F12) and run:<br>
+      <code>localStorage.removeItem('mip-intro-seen')</code>
+    </p>
+  </div>
+
+  <script>
+    function resetAnimation() {
+      localStorage.removeItem('mip-intro-seen');
+      document.getElementById('status').classList.add('show');
+      
+      // Auto-hide after 3 seconds
+      setTimeout(() => {
+        document.getElementById('status').classList.remove('show');
+      }, 3000);
+    }
+    
+    function goHome() {
+      window.location.href = '/';
+    }
+    
+    // Check current status on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const hasSeenIntro = localStorage.getItem('mip-intro-seen');
+      if (!hasSeenIntro) {
+        document.getElementById('status').textContent = 
+          'Animation is currently enabled. Go to home page to see it.';
+        document.getElementById('status').classList.add('show');
+      }
+    });
+  </script>
+</body>
+</html>
