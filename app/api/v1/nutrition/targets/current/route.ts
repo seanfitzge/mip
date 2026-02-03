@@ -24,13 +24,19 @@ export async function GET() {
     })
   }
 
-  const { data: latest } = await supabase
+  const { data: latest, error: queryError } = await supabase
     .from("macro_targets")
     .select("*")
     .eq("user_id", session.user.id)
     .order("date", { ascending: false })
     .limit(1)
     .maybeSingle()
+
+  // If table doesn't exist, return null (no targets yet)
+  if (queryError && (queryError.message.includes("table") || queryError.message.includes("schema cache"))) {
+    console.warn("macro_targets table not found - migration may not have been run")
+    return NextResponse.json(null)
+  }
 
   if (latest) {
     return NextResponse.json({

@@ -21,12 +21,24 @@ export async function POST(request: Request) {
 
   // Check if user already has targets saved for today
   const today = new Date().toISOString().slice(0, 10)
-  const { data: existingTarget } = await supabase
+  const { data: existingTarget, error: checkError } = await supabase
     .from("macro_targets")
     .select("*")
     .eq("user_id", session.user.id)
     .eq("date", today)
     .maybeSingle()
+
+  // If table doesn't exist, provide helpful error message
+  if (checkError && (checkError.message.includes("table") || checkError.message.includes("schema cache"))) {
+    return jsonError(
+      `Database table 'macro_targets' not found. Please run the migration:\n\n` +
+      `1. Go to your Supabase dashboard\n` +
+      `2. Navigate to SQL Editor\n` +
+      `3. Copy and run the contents of: supabase/migrations/0001_init.sql\n\n` +
+      `Error details: ${checkError.message}`,
+      500
+    )
+  }
 
   // If targets exist and user hasn't explicitly requested recalculation, return existing
   if (existingTarget && !body.forceRecalculate) {
@@ -53,31 +65,65 @@ export async function POST(request: Request) {
   })
 
   // Save targets (upsert for today)
-  const { error: saveError } = await supabase
+  // First try to insert, if that fails due to conflict, update
+  const { error: insertError } = await supabase
     .from("macro_targets")
-    .upsert(
-      {
-        user_id: session.user.id,
-        date: today,
-        calories: target.calories,
-        protein_g: target.proteinG,
-        carbs_g: target.carbsG,
-        fat_g: target.fatG,
-        protein_citation_doi: target.proteinCitationDoi,
-        carb_citation_doi: target.carbCitationDoi,
-        fat_citation_doi: target.fatCitationDoi,
-        calculation_method: "adaptive",
-        adjustment_reason: target.adjustmentReason ?? "",
-        confidence_level: target.confidenceLevel
-      },
-      {
-        onConflict: "user_id,date"
-      }
-    )
+    .insert({
+      user_id: session.user.id,
+      date: today,
+      calories: target.calories,
+      protein_g: target.proteinG,
+      carbs_g: target.carbsG,
+      fat_g: target.fatG,
+      protein_citation_doi: target.proteinCitationDoi,
+      carb_citation_doi: target.carbCitationDoi,
+      fat_citation_doi: target.fatCitationDoi,
+      calculation_method: "adaptive",
+      adjustment_reason: target.adjustmentReason ?? "",
+      confidence_level: target.confidenceLevel
+    })
 
-  if (saveError) {
-    console.error("Error saving macro targets:", saveError)
-    return jsonError(`Failed to save targets: ${saveError.message}`, 500)
+  // If insert failed due to conflict (unique constraint), update instead
+  if (insertError) {
+    // Check if it's a unique constraint violation (target already exists)
+    if (insertError.code === "23505" || insertError.message.includes("unique") || insertError.message.includes("duplicate")) {
+      const { error: updateError } = await supabase
+        .from("macro_targets")
+        .update({
+          calories: target.calories,
+          protein_g: target.proteinG,
+          carbs_g: target.carbsG,
+          fat_g: target.fatG,
+          protein_citation_doi: target.proteinCitationDoi,
+          carb_citation_doi: target.carbCitationDoi,
+          fat_citation_doi: target.fatCitationDoi,
+          calculation_method: "adaptive",
+          adjustment_reason: target.adjustmentReason ?? "",
+          confidence_level: target.confidenceLevel
+        })
+        .eq("user_id", session.user.id)
+        .eq("date", today)
+
+      if (updateError) {
+        console.error("Error updating macro targets:", updateError)
+        return jsonError(`Failed to save targets: ${updateError.message}. Please ensure the database migration has been run.`, 500)
+      }
+    } else if (insertError.message.includes("table") || insertError.message.includes("schema cache") || insertError.message.includes("not found")) {
+      // Table doesn't exist - migration hasn't been run
+      console.error("Table not found error:", insertError)
+      return jsonError(
+        `Database table 'macro_targets' not found. Please run the migration:\n\n` +
+        `1. Go to your Supabase dashboard (https://app.supabase.com)\n` +
+        `2. Navigate to SQL Editor\n` +
+        `3. Copy and run the contents of: supabase/migrations/0001_init.sql\n\n` +
+        `See DATABASE_SETUP.md for detailed instructions.\n\n` +
+        `Error: ${insertError.message}`,
+        500
+      )
+    } else {
+      console.error("Error saving macro targets:", insertError)
+      return jsonError(`Failed to save targets: ${insertError.message}`, 500)
+    }
   }
 
   // Return the calculated target (save is complete)
