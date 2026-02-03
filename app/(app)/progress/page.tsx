@@ -1,8 +1,8 @@
 import { SectionHeader } from "@/components/section-header"
-import { MiniLineChart } from "@/components/charts/mini-line-chart"
 import { Card } from "@/components/ui/card"
+import { MiniLineChart } from "@/components/charts/mini-line-chart"
+import { WeightLog } from "@/components/progress/weight-log"
 
-const weightTrend = [82.5, 82.2, 82.0, 81.9, 81.8, 81.7, 81.7]
 const performanceTrend = [78, 80, 82, 81, 83, 84, 85]
 const adherenceTrend = [92, 88, 90, 94, 91, 93, 95]
 
@@ -17,10 +17,7 @@ export default function ProgressPage() {
         <Card className="p-4">
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Weight trend</h3>
-            <MiniLineChart points={weightTrend} ariaLabel="Seven day weight trend chart" height={120} />
-            <p className="text-sm text-mutedForeground">
-              7-day rolling average with goal line at 82 kg.
-            </p>
+            <WeightLog />
           </div>
         </Card>
         <Card className="p-4">

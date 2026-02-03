@@ -4,16 +4,30 @@ type InterventionAlertProps = {
   title: string
   details: string[]
   active: boolean
+  severity?: "warning" | "critical" | "info"
 }
 
-export function InterventionAlert({ title, details, active }: InterventionAlertProps) {
+export function InterventionAlert({
+  title,
+  details,
+  active,
+  severity = "warning"
+}: InterventionAlertProps) {
+  const borderColor = !active
+    ? undefined
+    : severity === "critical"
+      ? "var(--mantine-color-red-6)"
+      : severity === "warning"
+        ? "var(--mantine-color-yellow-6)"
+        : "var(--mantine-color-indigo-6)"
+
   return (
     <Card
       withBorder
       radius="md"
       padding="lg"
       style={{
-        borderColor: active ? "var(--mantine-color-red-6)" : undefined
+        borderColor
       }}
     >
       <Stack gap="sm">

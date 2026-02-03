@@ -3,6 +3,7 @@ import { SectionHeader } from "@/components/section-header"
 import { MiniLineChart } from "@/components/charts/mini-line-chart"
 import { HrvTrendChart } from "@/components/charts/hrv-trend-chart"
 import { Card } from "@/components/ui/card"
+import { BaselineActions } from "@/components/biometrics/baseline-actions"
 
 export default async function BiometricsPage() {
   const summary = await getBiometricsSummary()
@@ -99,6 +100,7 @@ export default async function BiometricsPage() {
             <p className="text-sm text-mutedForeground">
               Recognition over recall: baseline context is always visible.
             </p>
+            <BaselineActions established={summary.baselineEstablished} />
           </div>
         </Card>
         <Card className="p-4">

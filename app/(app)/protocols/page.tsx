@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { ResearchCitationInline } from "@/components/research-citation-inline"
 import { Button } from "@/components/ui/button"
+import { ProtocolActions } from "@/components/protocols/protocol-actions"
 
 export default async function ProtocolsPage() {
   const protocol = await getReverseDietProtocol()
@@ -32,6 +33,10 @@ export default async function ProtocolsPage() {
               Target maintenance: {protocol.targetCalories} kcal
             </p>
           </div>
+          <ProtocolActions
+            currentWeek={protocol.currentWeek}
+            weeklyIncreaseKcal={protocol.weeklyIncreaseKcal}
+          />
         </div>
       </Card>
 

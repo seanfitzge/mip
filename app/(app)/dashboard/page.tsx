@@ -11,6 +11,8 @@ import { Card } from "@/components/ui/card"
 import { StatusBadge } from "@/components/ui/status-badge"
 import { HrvTrendChart } from "@/components/charts/hrv-trend-chart"
 import { ResearchCitationInline } from "@/components/research-citation-inline"
+import { NotificationCenter } from "@/components/notification-center"
+import { evaluateIntervention } from "@/lib/algorithms/interventions"
 
 export default async function DashboardPage() {
   const biometrics = await getBiometricsSummary()
@@ -18,6 +20,16 @@ export default async function DashboardPage() {
   const macros = await getMacroTargets()
   const research = await getResearchPapers()
   const user = await getCurrentUser()
+  const intervention = evaluateIntervention({
+    latestHrv: biometrics.hrvMs,
+    latestRhr: biometrics.restingHrBpm,
+    latestSleepQuality: biometrics.sleepQuality,
+    hrvBaselineMean: biometrics.hrvBaselineMean,
+    hrvBaselineSd: biometrics.hrvBaselineSd,
+    rhrBaselineMean: biometrics.rhrBaselineMean,
+    trend,
+    readinessScore: biometrics.readinessScore
+  })
 
   const recoveryStatus =
     biometrics.recoveryGrade === "optimal"
@@ -101,9 +113,7 @@ export default async function DashboardPage() {
       <InterventionAlert
         title="Recovery intervention triggered"
         details={[
-          "HRV trend below baseline threshold.",
-          "RHR elevated above baseline for two days.",
-          "Increase calories 5-10% (carbohydrate priority).",
+          ...intervention.reasons,
           "Reduce training intensity for 48-72 hours."
         ]}
         active={biometrics.interventionTriggered}
@@ -242,6 +252,10 @@ export default async function DashboardPage() {
           </p>
           <button className="text-sm font-semibold text-primary">View full analysis</button>
         </div>
+      </Card>
+
+      <Card className="p-4">
+        <NotificationCenter />
       </Card>
     </div>
   )

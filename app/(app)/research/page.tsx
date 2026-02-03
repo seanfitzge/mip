@@ -1,9 +1,8 @@
 import { getResearchPapers } from "@/lib/data/research"
 import { SectionHeader } from "@/components/section-header"
-import { ResearchCitation } from "@/components/research-citation"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { ResearchSearch } from "@/components/research/research-search"
 
 const topics = [
   "Protein requirements",
@@ -31,21 +30,7 @@ export default async function ResearchPage() {
         title="Research library"
         subtitle="Searchable studies with practical takeaways and citations."
       />
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="w-full max-w-md">
-          <Input placeholder="Search studies, topics, or DOI..." aria-label="Search studies" />
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {["All", "Protein", "Sleep", "HRV", "Metabolism", "Training"].map((filter) => (
-            <button
-              key={filter}
-              className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-mutedForeground hover:bg-muted hover:text-foreground"
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </div>
+      <ResearchSearch initialPapers={papers} />
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="p-4">
           <div className="space-y-2">
@@ -68,11 +53,6 @@ export default async function ResearchPage() {
             </div>
           </div>
         </Card>
-      </div>
-      <div className="grid gap-4 lg:grid-cols-2">
-        {papers.map((paper) => (
-          <ResearchCitation key={paper.id} paper={paper} />
-        ))}
       </div>
       <Card className="p-4">
         <div className="space-y-2">
