@@ -2,39 +2,287 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =================================
+   EXPERIMENTAL DESIGN SYSTEM
+   Inspired by Apple & Severance
+   ================================= */
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --radius: 0.75rem;
+  /* Experimental Color System - Futuristic Palette */
+  --color-neon-cyan: 0 255 255;
+  --color-electric-blue: 10 132 255;
+  --color-deep-purple: 130 71 229;
+  --color-hot-magenta: 255 0 128;
+  --color-laser-green: 50 255 150;
+  --color-plasma-pink: 255 95 213;
+  --color-arctic-white: 240 248 255;
+  --color-void-black: 8 8 12;
+  --color-obsidian: 15 15 20;
+  --color-charcoal: 25 25 35;
+  --color-ghost: 200 210 220;
+  
+  /* Gradient Definitions */
+  --gradient-primary: linear-gradient(135deg, rgb(10, 132, 255) 0%, rgb(130, 71, 229) 100%);
+  --gradient-accent: linear-gradient(135deg, rgb(255, 0, 128) 0%, rgb(255, 95, 213) 100%);
+  --gradient-success: linear-gradient(135deg, rgb(50, 255, 150) 0%, rgb(0, 255, 255) 100%);
+  --gradient-mesh: radial-gradient(at 40% 20%, rgb(10 132 255 / 0.3) 0px, transparent 50%),
+                   radial-gradient(at 80% 0%, rgb(130 71 229 / 0.3) 0px, transparent 50%),
+                   radial-gradient(at 0% 50%, rgb(255 0 128 / 0.2) 0px, transparent 50%);
+  
+  /* Shadows & Glows */
+  --glow-primary: 0 0 30px rgb(10 132 255 / 0.5), 0 0 60px rgb(10 132 255 / 0.2);
+  --glow-accent: 0 0 30px rgb(255 0 128 / 0.5), 0 0 60px rgb(255 0 128 / 0.2);
+  --glow-success: 0 0 30px rgb(50 255 150 / 0.5), 0 0 60px rgb(50 255 150 / 0.2);
+  --shadow-brutal: 8px 8px 0px rgb(0 0 0 / 0.3);
+  --shadow-float: 0 20px 60px rgb(0 0 0 / 0.4), 0 0 1px rgb(255 255 255 / 0.1);
+  
+  /* Typography Scale - Ultra Modern (Fluid Responsive) */
+  --text-xs: clamp(0.625rem, 0.6vw + 0.5rem, 0.6875rem);
+  --text-sm: clamp(0.75rem, 0.7vw + 0.6rem, 0.8125rem);
+  --text-base: clamp(0.875rem, 0.8vw + 0.7rem, 0.9375rem);
+  --text-lg: clamp(1rem, 1vw + 0.8rem, 1.125rem);
+  --text-xl: clamp(1.25rem, 1.5vw + 1rem, 1.5rem);
+  --text-2xl: clamp(1.5rem, 2vw + 1.2rem, 2.25rem);
+  --text-3xl: clamp(2rem, 2.5vw + 1.5rem, 3rem);
+  --text-4xl: clamp(2.5rem, 3.5vw + 2rem, 4.5rem);
+  --text-metric: clamp(2.5rem, 3vw + 2rem, 3.5rem);
+  --text-score: clamp(3.5rem, 5vw + 2.5rem, 6rem);
+  
+  /* Letter Spacing */
+  --tracking-tight: -0.05em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-ultra: 0.15em;
+
+  /* Theme Variables */
+  --background: var(--color-void-black);
+  --foreground: var(--color-arctic-white);
+  --card: var(--color-obsidian);
+  --card-foreground: var(--color-arctic-white);
+  --muted: var(--color-charcoal);
+  --muted-foreground: var(--color-ghost);
+  --primary: var(--color-electric-blue);
+  --primary-foreground: 255 255 255;
+  --border: 40 40 55;
+  --radius: 1.25rem;
+  --glass-bg: rgb(15 15 20 / 0.6);
+  --glass-border: rgb(255 255 255 / 0.1);
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --border: 217.2 32.6% 17.5%;
+  /* Dark mode is our primary mode */
+  --background: var(--color-void-black);
+  --foreground: var(--color-arctic-white);
+  --card: var(--color-obsidian);
+  --card-foreground: var(--color-arctic-white);
+  --muted: var(--color-charcoal);
+  --muted-foreground: var(--color-ghost);
+  --primary: var(--color-electric-blue);
+  --primary-foreground: 255 255 255;
+  --border: 40 40 55;
+}
+
+* {
+  @apply transition-all duration-300 ease-out;
 }
 
 body {
   @apply bg-background text-foreground antialiased;
+  font-size: var(--text-base);
+  line-height: 1.7;
+  letter-spacing: var(--tracking-normal);
+  background: rgb(var(--background));
+  background-image: var(--gradient-mesh);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 .section {
-  @apply py-16 md:py-24;
+  @apply py-12 sm:py-16 md:py-24 lg:py-32 relative;
 }
 
 .container {
-  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  @apply mx-auto max-w-[1400px] px-4 sm:px-6 md:px-8 lg:px-12;
+}
+
+:focus-visible {
+  outline: 3px solid rgb(var(--color-electric-blue));
+  outline-offset: 4px;
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+
+.body-text {
+  max-width: 65ch;
+  line-height: 1.8;
+}
+
+/* Glassmorphism Effect */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-float);
+}
+
+/* Gradient Text */
+.text-gradient {
+  background: var(--gradient-primary);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 4s ease infinite;
+}
+
+/* Neon Glow Text */
+.text-neon {
+  color: rgb(var(--color-neon-cyan));
+  text-shadow: 0 0 10px rgb(var(--color-neon-cyan) / 0.8),
+               0 0 20px rgb(var(--color-neon-cyan) / 0.5),
+               0 0 30px rgb(var(--color-neon-cyan) / 0.3);
+}
+
+/* Hover Glow Effect */
+.hover-glow {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-primary);
+}
+
+/* Morphing Background */
+.morph-bg {
+  animation: morph 8s ease-in-out infinite;
+  background: var(--gradient-primary);
+  filter: blur(40px);
+  opacity: 0.3;
+}
+
+/* Shimmer Effect */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Floating Animation */
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Grid Pattern Overlay */
+.grid-pattern {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--color-obsidian));
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  box-shadow: var(--glow-primary);
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: var(--tracking-tight);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: var(--text-4xl);
+  line-height: 1.1;
+  background: var(--gradient-primary);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Smooth animation performance */
+.intro-animation-wrapper {
+  will-change: opacity, transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hardware acceleration for smoother animations */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+}
+
+/* Utility Classes */
+.clip-triangle {
+  clip-path: polygon(50% 6%, 96% 92%, 4% 92%);
+}
+
+.clip-hexagon {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.clip-diagonal {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }

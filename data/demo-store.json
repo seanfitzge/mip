@@ -1,0 +1,31 @@
+{
+  "nutritionLogs": [],
+  "weightLogs": [],
+  "baseline": {
+    "established": false,
+    "hrvBaselineMean": 64,
+    "hrvBaselineSd": 6.2,
+    "rhrBaselineMean": 56,
+    "rhrBaselineSd": 3.1
+  },
+  "macroTargets": {
+    "calories": 2750,
+    "proteinG": 190,
+    "carbsG": 310,
+    "fatG": 70,
+    "adjustmentReason": "HRV trending up with stable RHR. Continue reverse diet progression (+100 kcal).",
+    "confidenceLevel": "STRONG",
+    "proteinCitationDoi": "10.1136/bjsports-2017-097608",
+    "carbCitationDoi": "10.1249/MSS.0000000000000852",
+    "fatCitationDoi": "10.1016/j.jsbmb.2021.105948"
+  },
+  "biometrics": [
+    { "date": "Mon", "hrvMs": 62, "restingHrBpm": 58, "sleepQuality": 72, "sleepDurationHours": 6.8 },
+    { "date": "Tue", "hrvMs": 64, "restingHrBpm": 57, "sleepQuality": 76, "sleepDurationHours": 7.1 },
+    { "date": "Wed", "hrvMs": 66, "restingHrBpm": 56, "sleepQuality": 80, "sleepDurationHours": 7.5 },
+    { "date": "Thu", "hrvMs": 67, "restingHrBpm": 55, "sleepQuality": 78, "sleepDurationHours": 7.2 },
+    { "date": "Fri", "hrvMs": 68, "restingHrBpm": 55, "sleepQuality": 82, "sleepDurationHours": 7.4 },
+    { "date": "Sat", "hrvMs": 70, "restingHrBpm": 54, "sleepQuality": 84, "sleepDurationHours": 7.8 },
+    { "date": "Sun", "hrvMs": 69, "restingHrBpm": 54, "sleepQuality": 83, "sleepDurationHours": 7.6 }
+  ]
+}

@@ -1,14 +1,29 @@
+import { redirect } from "next/navigation"
 import { AppSidebar } from "@/components/app-sidebar"
 import { AppTopbar } from "@/components/app-topbar"
+import { DailyMetricsWrapper } from "@/components/daily-metrics-wrapper"
+import { getServerSession } from "@/lib/supabase/server"
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession()
+  if (!session) {
+    redirect("/sign-in")
+  }
+
   return (
-    <div className="min-h-screen bg-muted/20">
+    <div className="min-h-screen bg-background">
+      {/* Daily Metrics System */}
+      <DailyMetricsWrapper />
+
       <div className="flex">
         <AppSidebar />
         <div className="flex-1">
-          <AppTopbar />
-          <main className="px-6 pb-12 pt-6">{children}</main>
+          <AppTopbar userEmail={session.user.email ?? ""} />
+          <main className="px-6 pb-12 pt-6">
+            <div className="space-y-6">
+              {children}
+            </div>
+          </main>
         </div>
       </div>
     </div>

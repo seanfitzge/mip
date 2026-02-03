@@ -3,7 +3,19 @@ export type BiometricsSummary = {
   restingHrBpm: number
   sleepQuality: number
   sleepDurationHours: number
+  sleepEfficiencyPercent?: number
   readinessScore: number
+  recoveryGrade: "optimal" | "good" | "fair" | "poor"
+  interventionTriggered: boolean
+  sourceDevice: string
+  deviceAccuracyCcc: number
+  baselineEstablished: boolean
+  baselineDaysComplete: number
+  baselineDaysRequired: number
+  hrvBaselineMean: number
+  hrvBaselineSd: number
+  rhrBaselineMean: number
+  rhrBaselineSd: number
 }
 
 export type BiometricsTrend = {
@@ -11,4 +23,5 @@ export type BiometricsTrend = {
   hrvMs: number
   restingHrBpm: number
   sleepQuality: number
+  sleepDurationHours: number
 }

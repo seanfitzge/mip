@@ -1,17 +1,56 @@
-import { getMacroTargets } from "@/lib/data/macros"
+"use client"
+
+import { useState, useEffect } from "react"
+import Link from "next/link"
 import { SectionHeader } from "@/components/section-header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@/components/ui/table"
+import { ConfidenceBadge } from "@/components/confidence-badge"
+import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { NutritionLogPanel } from "@/components/nutrition/nutrition-log-panel"
+import type { MacroTargets } from "@/types/macros"
 
-const mockLog = [
-  { time: "7:30 AM", meal: "Greek yogurt + berries", calories: 320, protein: 32, carbs: 35, fat: 5 },
-  { time: "12:15 PM", meal: "Chicken bowl", calories: 540, protein: 45, carbs: 60, fat: 12 },
-  { time: "6:45 PM", meal: "Salmon + rice", calories: 620, protein: 48, carbs: 70, fat: 18 }
-]
+export default function NutritionPage() {
+  const [macros, setMacros] = useState<MacroTargets | null>(null)
+  const [hasTargets, setHasTargets] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-export default async function NutritionPage() {
-  const macros = await getMacroTargets()
+  useEffect(() => {
+    loadMacros()
+  }, [])
+
+  const loadMacros = async () => {
+    try {
+      const response = await fetch("/api/v1/nutrition/targets/current")
+      if (response.ok) {
+        const data = await response.json()
+        if (data && data.calories && data.calories > 0) {
+          setMacros(data)
+          setHasTargets(true)
+        } else {
+          setHasTargets(false)
+        }
+      } else {
+        setHasTargets(false)
+      }
+    } catch (error) {
+      console.error("Error loading macros:", error)
+      setHasTargets(false)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Use default macros if none loaded yet
+  const displayMacros: MacroTargets = macros ?? {
+    calories: 0,
+    proteinG: 0,
+    carbsG: 0,
+    fatG: 0,
+    confidenceLevel: "MODERATE",
+    proteinCitationDoi: "",
+    carbCitationDoi: "",
+    fatCitationDoi: ""
+  }
 
   return (
     <div className="space-y-8">
@@ -19,82 +58,133 @@ export default async function NutritionPage() {
         title="Nutrition targets"
         subtitle="Evidence-based macro ranges and daily logging."
       />
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Today&apos;s targets</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
-              <div>
-                <p>Calories</p>
-                <p className="text-2xl font-semibold text-foreground">{macros.calories}</p>
-              </div>
-              <div>
-                <p>Protein</p>
-                <p className="text-2xl font-semibold text-foreground">{macros.proteinG} g</p>
-              </div>
-              <div>
-                <p>Carbs</p>
-                <p className="text-2xl font-semibold text-foreground">{macros.carbsG} g</p>
-              </div>
-              <div>
-                <p>Fat</p>
-                <p className="text-2xl font-semibold text-foreground">{macros.fatG} g</p>
-              </div>
-            </div>
-            <p className="text-xs text-muted-foreground">{macros.adjustmentReason}</p>
-          </CardContent>
+      
+      {loading ? (
+        <Card className="p-4">
+          <p className="text-sm text-mutedForeground">Loading...</p>
         </Card>
+      ) : hasTargets && displayMacros.calories > 0 ? (
+        <Card className="p-4">
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold">Today&apos;s targets</h3>
+              <div className="flex items-center gap-3">
+                <ConfidenceBadge level={displayMacros.confidenceLevel} />
+                <Link href="/settings">
+                  <Button variant="ghost" className="h-9 px-3 text-xs">
+                    Update targets
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Calories
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.calories}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Protein
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.proteinG} g</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Carbs
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.carbsG} g</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                  Fat
+                </p>
+                <p className="text-2xl font-bold text-foreground">{displayMacros.fatG} g</p>
+              </div>
+            </div>
+            {displayMacros.adjustmentReason && (
+              <p className="text-sm text-mutedForeground">{displayMacros.adjustmentReason}</p>
+            )}
+            {displayMacros.proteinCitationDoi && (
+              <div className="flex flex-wrap gap-3 text-xs text-primary">
+                <a href={`https://doi.org/${displayMacros.proteinCitationDoi}`} target="_blank" rel="noreferrer">
+                  Protein DOI
+                </a>
+                <a href={`https://doi.org/${displayMacros.carbCitationDoi}`} target="_blank" rel="noreferrer">
+                  Carb DOI
+                </a>
+                <a href={`https://doi.org/${displayMacros.fatCitationDoi}`} target="_blank" rel="noreferrer">
+                  Fat DOI
+                </a>
+              </div>
+            )}
+          </div>
+        </Card>
+      ) : (
+        <Card className="p-4">
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold">No targets set</h3>
+            <p className="text-sm text-mutedForeground">
+              Set your nutrition targets in settings to start tracking your macros.
+            </p>
+            <Link href="/settings">
+              <Button className="h-10 px-4">
+                Go to Settings
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      )}
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Macro calculator (preview)</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="grid gap-3 md:grid-cols-2">
-              <Input placeholder="Weight (kg)" />
-              <Input placeholder="Body fat %" />
-              <Input placeholder="Training type" />
-              <Input placeholder="Goal" />
-            </div>
-            <div className="rounded-md border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-              This calculator will adapt to biomarkers in Phase 2.
-            </div>
-          </CardContent>
+      {hasTargets && displayMacros.calories > 0 && (
+        <NutritionLogPanel macros={displayMacros} />
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="p-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Evidence-based macro ranges</h3>
+            <p className="text-sm text-mutedForeground">
+              Protein: 2.0-2.7 g/kg during deficit, 1.6-2.2 g/kg maintenance.
+            </p>
+            <p className="text-sm text-mutedForeground">
+              Carbs: 3-5 g/kg strength, 5-7 g/kg mixed, 6-10 g/kg endurance.
+            </p>
+            <p className="text-sm text-mutedForeground">
+              Fat minimums: 20% of calories to protect hormones (sex-specific thresholds).
+            </p>
+          </div>
+        </Card>
+        <Card className="p-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Nutrient timing guidance</h3>
+            <p className="text-sm text-mutedForeground">
+              Primary: hit daily protein, carbs, and fat targets first.
+            </p>
+            <p className="text-sm text-mutedForeground">
+              Secondary: 0.4 g/kg protein per meal across 4+ meals, 3-4h apart.
+            </p>
+            <p className="text-sm text-mutedForeground">
+              Optional: shift 20-30 g carbs to evening when sleep &lt;70 for 3+ nights.
+            </p>
+          </div>
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Today&apos;s log</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableHeaderCell>Time</TableHeaderCell>
-                <TableHeaderCell>Meal</TableHeaderCell>
-                <TableHeaderCell>Calories</TableHeaderCell>
-                <TableHeaderCell>Protein</TableHeaderCell>
-                <TableHeaderCell>Carbs</TableHeaderCell>
-                <TableHeaderCell>Fat</TableHeaderCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {mockLog.map((entry) => (
-                <TableRow key={entry.time}>
-                  <TableCell>{entry.time}</TableCell>
-                  <TableCell>{entry.meal}</TableCell>
-                  <TableCell>{entry.calories}</TableCell>
-                  <TableCell>{entry.protein} g</TableCell>
-                  <TableCell>{entry.carbs} g</TableCell>
-                  <TableCell>{entry.fat} g</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
+      <Card className="p-4">
+        <div className="space-y-2">
+          <h3 className="text-lg font-semibold">Energy availability safeguards</h3>
+          <p className="text-sm text-mutedForeground">
+            Females: clinical &lt;30 kcal/kg FFM, subclinical &lt;45 kcal/kg FFM for 5+ days.
+          </p>
+          <p className="text-sm text-mutedForeground">
+            Males: clinical &lt;25 kcal/kg FFM, subclinical &lt;40 kcal/kg FFM for 14+ days.
+          </p>
+          <p className="text-sm text-mutedForeground">
+            If thresholds are crossed, the system increases intake and recommends recovery.
+          </p>
+        </div>
       </Card>
     </div>
   )
