@@ -1,3 +1,5 @@
+import type { EvidenceConfidence } from "@/types/evidence"
+
 export type ResearchPaper = {
   id: string
   doi: string
@@ -8,6 +10,8 @@ export type ResearchPaper = {
   studyType: string
   population: string
   qualityRating: number
+  confidenceLevel: EvidenceConfidence
   keyFindings: string[]
+  eli5Summary?: string
   topics: string[]
 }
