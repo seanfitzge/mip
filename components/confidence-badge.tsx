@@ -1,17 +1,25 @@
-import { Badge } from "@/components/ui/badge"
-import type { EvidenceConfidence } from "@/types/evidence"
+import { Badge } from "@mantine/core"
 
-const colorMap: Record<EvidenceConfidence, string> = {
-  STRONG: "bg-success text-white",
-  MODERATE: "bg-warning text-white",
-  PRELIMINARY: "bg-info text-white",
-  LIMITED: "bg-critical text-white"
+type ConfidenceBadgeProps = {
+  level: string
 }
 
-export function ConfidenceBadge({ level }: { level: EvidenceConfidence }) {
+const CONFIDENCE_STYLES: Record<string, { color: string; label: string }> = {
+  STRONG: { color: "teal", label: "Strong evidence" },
+  MODERATE: { color: "yellow", label: "Moderate evidence" },
+  PRELIMINARY: { color: "orange", label: "Preliminary evidence" },
+  LIMITED: { color: "red", label: "Limited evidence" },
+  HIGH: { color: "teal", label: "High confidence" },
+  LOW: { color: "red", label: "Low confidence" }
+}
+
+export function ConfidenceBadge({ level }: ConfidenceBadgeProps) {
+  const normalized = level.trim().toUpperCase()
+  const style = CONFIDENCE_STYLES[normalized]
+
   return (
-    <Badge className={colorMap[level]}>
-      {level} EVIDENCE
+    <Badge variant="light" color={style?.color ?? "gray"}>
+      {style?.label ?? normalized}
     </Badge>
   )
 }

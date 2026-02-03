@@ -1,5 +1,4 @@
-import { Card } from "@/components/ui/card"
-import { cn } from "@/lib/utils"
+import { Badge, Card, Group, Progress, Stack, Text, Title } from "@mantine/core"
 
 type BaselineStatusCardProps = {
   daysComplete: number
@@ -12,28 +11,25 @@ export function BaselineStatusCard({
   daysRequired,
   established
 }: BaselineStatusCardProps) {
-  const progress = Math.min((daysComplete / daysRequired) * 100, 100)
+  const progress = daysRequired > 0 ? Math.min(100, (daysComplete / daysRequired) * 100) : 0
 
   return (
-    <Card className="p-4">
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold">Baseline establishment</p>
-          <p className={cn("text-sm font-semibold", established ? "text-success" : "text-mutedForeground")}>
-            {established ? "Complete" : "In progress"}
-          </p>
-        </div>
-        <div className="h-2 w-full rounded-full bg-muted">
-          <div
-            className="h-2 rounded-full bg-primary"
-            style={{ width: `${progress}%` }}
-            aria-hidden="true"
-          />
-        </div>
-        <p className="text-sm text-mutedForeground">
-          {daysComplete} of {daysRequired} days of consistent HRV data collected.
-        </p>
-      </div>
+    <Card withBorder radius="md" padding="lg">
+      <Stack gap="sm">
+        <Group justify="space-between">
+          <Title order={4}>Baseline status</Title>
+          <Badge variant="light" color={established ? "teal" : "yellow"}>
+            {established ? "Established" : "In progress"}
+          </Badge>
+        </Group>
+        <Text size="sm" c="dimmed">
+          {daysComplete} of {daysRequired} days logged
+        </Text>
+        <Progress value={progress} radius="xl" />
+        <Text size="xs" c="dimmed">
+          Recommendations unlock after a 14-day baseline.
+        </Text>
+      </Stack>
     </Card>
   )
 }
