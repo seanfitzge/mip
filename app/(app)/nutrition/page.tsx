@@ -25,17 +25,23 @@ export default function NutritionPage() {
       const response = await fetch("/api/v1/nutrition/targets/current")
       if (response.ok) {
         const data = await response.json()
-        if (data && data.calories > 0) {
+        // Check if we got valid macro data (not null and has calories)
+        if (data && data.calories && data.calories > 0) {
           setMacros(data)
           setHasTargets(true)
           setShowQuestionnaire(false)
         } else {
+          // No targets found, show questionnaire
+          setHasTargets(false)
           setShowQuestionnaire(true)
         }
       } else {
+        setHasTargets(false)
         setShowQuestionnaire(true)
       }
     } catch (error) {
+      console.error("Error loading macros:", error)
+      setHasTargets(false)
       setShowQuestionnaire(true)
     } finally {
       setLoading(false)
@@ -48,6 +54,9 @@ export default function NutritionPage() {
   }
 
   const handleTargetsSaved = async () => {
+    // Reload macros to show the newly saved targets
+    // Add a small delay to ensure database write has propagated
+    await new Promise(resolve => setTimeout(resolve, 300))
     await loadMacros()
   }
 

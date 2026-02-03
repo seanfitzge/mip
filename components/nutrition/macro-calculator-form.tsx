@@ -68,6 +68,9 @@ export function MacroCalculatorForm({ dietPhaseInfo, onTargetsSaved }: MacroCalc
     if (bodyFat && (Number(bodyFat) < 0 || Number(bodyFat) > 100)) {
       newErrors.bodyFat = "Body fat percentage must be between 0 and 100"
     }
+    if (!dietType) {
+      newErrors.dietType = "Diet type is required"
+    }
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -76,29 +79,57 @@ export function MacroCalculatorForm({ dietPhaseInfo, onTargetsSaved }: MacroCalc
     event.preventDefault()
     if (!validate()) return
     
-    setStatus("Calculating...")
-    const response = await fetch("/api/v1/nutrition/calculate-targets", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        weightKg: Number(weightKg ?? 0),
-        bodyFatPercent: bodyFat ? Number(bodyFat) : null,
-        trainingType,
-        goal: dietType,
-        dietPhaseInfo: dietPhaseInfo,
-        forceRecalculate: hasSavedTargets // Force recalculation if targets already exist
-      })
-    })
-    if (!response.ok) {
-      setStatus("Unable to calculate targets.")
+    if (!dietType) {
+      setStatus("Please select a diet type.")
       return
     }
-    const data = await response.json()
-    setResult(data)
-    setHasSavedTargets(true)
-    setStatus(null)
-    if (onTargetsSaved) {
-      onTargetsSaved()
+    
+    setStatus("Calculating and saving...")
+    try {
+      const response = await fetch("/api/v1/nutrition/calculate-targets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          weightKg: Number(weightKg ?? 0),
+          bodyFatPercent: bodyFat ? Number(bodyFat) : null,
+          trainingType,
+          goal: dietType,
+          dietPhaseInfo: dietPhaseInfo,
+          forceRecalculate: hasSavedTargets // Force recalculation if targets already exist
+        })
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        setStatus(`Unable to calculate targets: ${errorData.error || "Unknown error"}`)
+        return
+      }
+      
+      const data = await response.json()
+      
+      // Verify we got valid data
+      if (!data || !data.calories || data.calories === 0) {
+        setStatus("Error: Invalid response from server")
+        return
+      }
+      
+      setResult(data)
+      setHasSavedTargets(true)
+      setStatus("Targets calculated and saved successfully!")
+      
+      // Call the callback to refresh parent component after a brief delay
+      // to ensure database write has completed
+      setTimeout(() => {
+        if (onTargetsSaved) {
+          onTargetsSaved()
+        }
+        // Clear status after showing success
+        setTimeout(() => {
+          setStatus(null)
+        }, 1500)
+      }, 500)
+    } catch (error) {
+      setStatus(`Error: ${error instanceof Error ? error.message : "Unknown error"}`)
     }
   }
 
@@ -149,8 +180,14 @@ export function MacroCalculatorForm({ dietPhaseInfo, onTargetsSaved }: MacroCalc
           label="Diet type"
           helperText="Your current diet phase"
           value={dietType}
-          onChange={(event) => setDietType(event.target.value)}
+          onChange={(event) => {
+            setDietType(event.target.value)
+            if (errors.dietType) {
+              setErrors((prev) => ({ ...prev, dietType: "" }))
+            }
+          }}
           required
+          errorText={errors.dietType}
         >
           <option value="" disabled>Select diet type...</option>
           <option value="deficit">Deficit / Cutting</option>
@@ -172,11 +209,13 @@ export function MacroCalculatorForm({ dietPhaseInfo, onTargetsSaved }: MacroCalc
       <Button type="submit" className="h-12 px-4 w-full">
         {hasSavedTargets ? "Recalculate targets" : "Calculate & save targets"}
       </Button>
-      {result && !hasSavedTargets && (
-        <div className="rounded-md border border-border p-3 text-sm text-mutedForeground">
-          <p className="font-semibold mb-1">Calculated targets:</p>
-          <p>{result.calories} kcal · {result.proteinG}P · {result.carbsG}C · {result.fatG}F</p>
-          <p className="text-xs mt-2 text-mutedForeground">Targets have been saved. Use these going forward.</p>
+      {result && status && status.includes("successfully") && (
+        <div className="rounded-md border border-primary/20 bg-primary/5 p-3 text-sm">
+          <p className="font-semibold text-primary mb-1">Targets saved successfully!</p>
+          <p className="text-mutedForeground">
+            {result.calories} kcal · {result.proteinG}P · {result.carbsG}C · {result.fatG}F
+          </p>
+          <p className="text-xs mt-2 text-mutedForeground">These targets will be used going forward.</p>
         </div>
       )}
     </form>

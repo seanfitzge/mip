@@ -53,25 +53,40 @@ export async function POST(request: Request) {
   })
 
   // Save targets (upsert for today)
-  await supabase.from("macro_targets").upsert({
-    user_id: session.user.id,
-    date: today,
-    calories: target.calories,
-    protein_g: target.proteinG,
-    carbs_g: target.carbsG,
-    fat_g: target.fatG,
-    protein_citation_doi: target.proteinCitationDoi,
-    carb_citation_doi: target.carbCitationDoi,
-    fat_citation_doi: target.fatCitationDoi,
-    calculation_method: "adaptive",
-    adjustment_reason: target.adjustmentReason ?? "",
-    confidence_level: target.confidenceLevel
-  }, {
-    onConflict: "user_id,date"
-  })
+  const { error: saveError } = await supabase
+    .from("macro_targets")
+    .upsert(
+      {
+        user_id: session.user.id,
+        date: today,
+        calories: target.calories,
+        protein_g: target.proteinG,
+        carbs_g: target.carbsG,
+        fat_g: target.fatG,
+        protein_citation_doi: target.proteinCitationDoi,
+        carb_citation_doi: target.carbCitationDoi,
+        fat_citation_doi: target.fatCitationDoi,
+        calculation_method: "adaptive",
+        adjustment_reason: target.adjustmentReason ?? "",
+        confidence_level: target.confidenceLevel
+      },
+      {
+        onConflict: "user_id,date"
+      }
+    )
 
+  if (saveError) {
+    console.error("Error saving macro targets:", saveError)
+    return jsonError(`Failed to save targets: ${saveError.message}`, 500)
+  }
+
+  // Return the calculated target (save is complete)
   return NextResponse.json({
-    ...target,
-    isExisting: false
+    calories: target.calories,
+    proteinG: target.proteinG,
+    carbsG: target.carbsG,
+    fatG: target.fatG,
+    isExisting: false,
+    saved: true
   })
 }
