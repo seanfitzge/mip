@@ -136,8 +136,6 @@ export default function NutritionPage() {
             </div>
           </Card>
         </div>
-      )}
-
       ) : (
         <Card className="p-4">
           <div className="space-y-3">
