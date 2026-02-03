@@ -3,6 +3,7 @@ import { SectionHeader } from "@/components/section-header"
 import { ConfidenceBadge } from "@/components/confidence-badge"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { FormField } from "@/components/ui/form-field"
 import { Button } from "@/components/ui/button"
 
 const mockLog = [
@@ -72,10 +73,10 @@ export default async function NutritionPage() {
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Macro calculator (preview)</h3>
             <div className="grid gap-3 sm:grid-cols-2">
-              <Input placeholder="Weight (kg)" />
-              <Input placeholder="Body fat %" />
-              <Input placeholder="Training type" />
-              <Input placeholder="Goal" />
+              <FormField label="Weight (kg)" helperText="Used to estimate protein range." />
+              <FormField label="Body fat %" helperText="Optional for lean mass targets." />
+              <FormField label="Training type" helperText="Strength, endurance, mixed." />
+              <FormField label="Goal" helperText="Cut, maintain, reverse diet." />
             </div>
             <p className="text-sm text-mutedForeground">
               This calculator will adapt to biomarkers in Phase 2.
