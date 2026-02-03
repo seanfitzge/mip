@@ -1,6 +1,6 @@
 import { SectionHeader } from "@/components/section-header"
 import { Timeline } from "@/components/timeline"
-import { Card, Container, SimpleGrid, Stack, Text, Title } from "@mantine/core"
+import { Card } from "@/components/ui/card"
 
 const roadmapItems = [
   {
@@ -86,7 +86,7 @@ const monetization = [
 ]
 
 const implementationPriorities = [
-  "Initialize Next.js 15 + TypeScript + Mantine v8 foundation",
+  "Initialize Next.js 16 + TypeScript + Tailwind design system",
   "Supabase setup with RLS and baseline schema migration",
   "Authentication (Clerk or NextAuth) with MFA support",
   "Terra API OAuth integration + baseline workflow",
@@ -97,56 +97,52 @@ const implementationPriorities = [
 export default function RoadmapPage() {
   return (
     <section className="section">
-      <Container size="lg">
-        <Stack gap="xl">
+      <div className="container">
+        <div className="space-y-8">
           <SectionHeader
             title="Development roadmap"
             subtitle="A staged build that prioritizes scientific accuracy and recovery outcomes."
           />
           <Timeline items={roadmapItems} />
-          <SimpleGrid cols={{ base: 1, lg: 2 }}>
+          <div className="grid gap-4 lg:grid-cols-2">
             {successCriteria.map((criteria) => (
-              <Card key={criteria.title} withBorder radius="md" padding="lg">
-                <Stack gap="sm">
-                  <Title order={4}>{criteria.title}</Title>
-                  <Stack gap={4}>
-                    {criteria.items.map((item) => (
-                      <Text key={item} size="sm" c="dimmed">
-                        • {item}
-                      </Text>
-                    ))}
-                  </Stack>
-                </Stack>
+              <Card key={criteria.title} className="p-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">{criteria.title}</h3>
+                  {criteria.items.map((item) => (
+                    <p key={item} className="text-sm text-mutedForeground">
+                      • {item}
+                    </p>
+                  ))}
+                </div>
               </Card>
             ))}
-          </SimpleGrid>
-          <Card withBorder radius="md" padding="lg">
-            <Stack gap="sm">
-              <Title order={4}>Monetization tiers</Title>
-              <SimpleGrid cols={{ base: 1, md: 2 }}>
+          </div>
+          <Card className="p-4">
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold">Monetization tiers</h3>
+              <div className="grid gap-3 md:grid-cols-2">
                 {monetization.map((tier) => (
-                  <Stack key={tier.tier} gap={4}>
-                    <Text fw={600}>{tier.tier}</Text>
-                    <Text size="sm" c="dimmed">
-                      {tier.details}
-                    </Text>
-                  </Stack>
+                  <div key={tier.tier}>
+                    <p className="text-sm font-semibold text-foreground">{tier.tier}</p>
+                    <p className="text-sm text-mutedForeground">{tier.details}</p>
+                  </div>
                 ))}
-              </SimpleGrid>
-            </Stack>
+              </div>
+            </div>
           </Card>
-          <Card withBorder radius="md" padding="lg">
-            <Stack gap="sm">
-              <Title order={4}>Implementation priorities</Title>
+          <Card className="p-4">
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Implementation priorities</h3>
               {implementationPriorities.map((item) => (
-                <Text key={item} size="sm" c="dimmed">
+                <p key={item} className="text-sm text-mutedForeground">
                   • {item}
-                </Text>
+                </p>
               ))}
-            </Stack>
+            </div>
           </Card>
-        </Stack>
-      </Container>
+        </div>
+      </div>
     </section>
   )
 }

@@ -1,11 +1,11 @@
 import { SectionHeader } from "@/components/section-header"
-import { Card, Container, SimpleGrid, Stack, Text, Title } from "@mantine/core"
+import { Card } from "@/components/ui/card"
 
 const frontendStack = [
-  "Next.js 15 (App Router) with TypeScript",
-  "Mantine v8 UI components + @mantine/charts",
+  "Next.js 16 (App Router) with TypeScript",
+  "Tailwind CSS + custom component system",
   "Tailwind CSS utilities for layout + spacing",
-  "Default dark mode with high-contrast text"
+  "Optional dark mode with high-contrast text"
 ]
 
 const backendStack = [
@@ -95,103 +95,103 @@ const apiGroups = [
 export default function ArchitecturePage() {
   return (
     <section className="section">
-      <Container size="lg">
-        <Stack gap="xl">
+      <div className="container">
+        <div className="space-y-8">
           <SectionHeader
             title="Technical architecture"
             subtitle="A HIPAA-ready, evidence-first platform built for recovery-informed nutrition."
           />
-          <SimpleGrid cols={{ base: 1, lg: 2 }}>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Frontend</Title>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Frontend</h3>
                 {frontendStack.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
+              </div>
             </Card>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Backend & data</Title>
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Backend & data</h3>
                 {backendStack.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
+              </div>
             </Card>
-          </SimpleGrid>
+          </div>
 
-          <SimpleGrid cols={{ base: 1, lg: 2 }}>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Wearable integration</Title>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Wearable integration</h3>
                 {wearableStack.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
+              </div>
             </Card>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Compliance checklist</Title>
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Compliance checklist</h3>
                 {complianceChecklist.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
+              </div>
             </Card>
-          </SimpleGrid>
+          </div>
 
-          <SimpleGrid cols={{ base: 1, lg: 2 }}>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Design principles</Title>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Design principles</h3>
                 {designPrinciples.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
+              </div>
             </Card>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Database schema highlights</Title>
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Database schema highlights</h3>
                 {databaseTables.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
+              </div>
             </Card>
-          </SimpleGrid>
+          </div>
 
-          <div>
+          <div className="space-y-4">
             <SectionHeader
               title="API surface (v1)"
               subtitle="Versioned endpoints for biometrics, nutrition, research, and safety."
             />
-            <SimpleGrid cols={{ base: 1, md: 2, xl: 3 }}>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {apiGroups.map((group) => (
-                <Card key={group.title} withBorder radius="md" padding="lg">
-                  <Stack gap="sm">
-                    <Title order={5}>{group.title}</Title>
+                <Card key={group.title} className="p-4">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-semibold">{group.title}</h3>
                     {group.endpoints.map((endpoint) => (
-                      <Text key={endpoint} size="sm" c="dimmed">
+                      <p key={endpoint} className="text-sm text-mutedForeground">
                         {endpoint}
-                      </Text>
+                      </p>
                     ))}
-                  </Stack>
+                  </div>
                 </Card>
               ))}
-            </SimpleGrid>
+            </div>
           </div>
-        </Stack>
-      </Container>
+        </div>
+      </div>
     </section>
   )
 }

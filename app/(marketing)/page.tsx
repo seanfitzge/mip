@@ -1,9 +1,7 @@
-"use client"
-
 import Link from "next/link"
 import { SectionHeader } from "@/components/section-header"
 import { ConfidenceBadge } from "@/components/confidence-badge"
-import { Button, Card, Container, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core"
+import { Card } from "@/components/ui/card"
 
 const featureCards = [
   {
@@ -97,226 +95,205 @@ export default function HomePage() {
   return (
     <>
       <section className="section">
-        <Container size="lg">
-          <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xl">
-            <Stack gap="lg">
-              <Stack gap="xs">
-                <Text size="sm" fw={600} tt="uppercase" c="dimmed">
+        <div className="container">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
                   Metabolic Intelligence Platform · Version 2.0
-                </Text>
-                <Title order={1}>
+                </p>
+                <h1 className="text-3xl font-semibold text-foreground md:text-4xl">
                   Evidence-based nutrition, powered by real-time recovery biomarkers.
-                </Title>
-                <Text c="dimmed">
-                  A metabolic intelligence system that connects HRV, RHR, sleep, and
-                  training load with research-cited recommendations and adaptive macro targets.
-                </Text>
-              </Stack>
-              <Group>
-                <Button component={Link} href="/dashboard">
+                </h1>
+                <p className="text-sm text-mutedForeground body-text">
+                  A metabolic intelligence system that connects HRV, RHR, sleep, and training
+                  load with research-cited recommendations and adaptive macro targets.
+                </p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href="/dashboard"
+                  className="inline-flex h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primaryForeground transition-colors hover:bg-primary/90 active:bg-primary/85"
+                >
                   Request early access
-                </Button>
-                <Button component={Link} href="/dashboard" variant="light">
+                </Link>
+                <Link
+                  href="/dashboard"
+                  className="inline-flex h-12 items-center justify-center rounded-md border border-border px-6 text-sm font-semibold text-foreground hover:bg-muted"
+                >
                   View product preview
-                </Button>
-              </Group>
-              <Stack gap={4}>
+                </Link>
+              </div>
+              <div className="space-y-2 text-sm text-mutedForeground">
                 {valueProps.map((value) => (
-                  <Text key={value} size="sm" c="dimmed">
-                    • {value}
-                  </Text>
+                  <p key={value}>• {value}</p>
                 ))}
-              </Stack>
-            </Stack>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Today&apos;s Metabolic Snapshot</Title>
-                <Text size="sm" c="dimmed">
-                  Recovery up, stress down. Continue reverse diet progression.
-                </Text>
-                <SimpleGrid cols={2}>
-                  <Stack gap={2}>
-                    <Text size="xs" c="dimmed">
-                      HRV
-                    </Text>
-                    <Text fw={600} size="xl">
-                      68 ms
-                    </Text>
-                  </Stack>
-                  <Stack gap={2}>
-                    <Text size="xs" c="dimmed">
-                      RHR
-                    </Text>
-                    <Text fw={600} size="xl">
-                      54 bpm
-                    </Text>
-                  </Stack>
-                  <Stack gap={2}>
-                    <Text size="xs" c="dimmed">
-                      Sleep
-                    </Text>
-                    <Text fw={600} size="xl">
-                      7.4 hrs
-                    </Text>
-                  </Stack>
-                  <Stack gap={2}>
-                    <Text size="xs" c="dimmed">
-                      Recovery grade
-                    </Text>
-                    <Text fw={600} size="xl">
-                      Good
-                    </Text>
-                  </Stack>
-                </SimpleGrid>
-                <Card withBorder radius="md" padding="sm">
-                  <Text size="sm" c="dimmed">
-                    Evidence note: Pre-sleep carbohydrate timing may improve sleep
-                    onset in athletes (moderate confidence).
-                  </Text>
-                </Card>
-              </Stack>
+              </div>
+            </div>
+            <Card className="p-4">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold">Today&apos;s Metabolic Snapshot</h3>
+                  <p className="text-sm text-mutedForeground">
+                    Recovery up, stress down. Continue reverse diet progression.
+                  </p>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {[
+                    { label: "HRV", value: "68 ms" },
+                    { label: "RHR", value: "54 bpm" },
+                    { label: "Sleep", value: "7.4 hrs" },
+                    { label: "Recovery grade", value: "Good" }
+                  ].map((item) => (
+                    <div key={item.label}>
+                      <p className="text-xs font-semibold uppercase tracking-wide text-mutedForeground">
+                        {item.label}
+                      </p>
+                      <p className="text-xl font-semibold text-foreground">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="rounded-md border border-border bg-muted p-3 text-sm text-mutedForeground">
+                  Evidence note: Pre-sleep carbohydrate timing may improve sleep onset in
+                  athletes (moderate confidence).
+                </div>
+              </div>
             </Card>
-          </SimpleGrid>
-        </Container>
+          </div>
+        </div>
       </section>
 
       <section className="section bg-muted/30">
-        <Container size="lg">
+        <div className="container">
           <SectionHeader
             title="Core System Pillars"
             subtitle="Built for serious athletes who need actionable, cited guidance."
           />
-          <SimpleGrid cols={{ base: 1, md: 2, xl: 4 }}>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {featureCards.map((feature) => (
-              <Card key={feature.title} withBorder radius="md" padding="lg">
-                <Stack gap="xs">
-                  <Title order={4}>{feature.title}</Title>
-                  <Text size="sm" c="dimmed">
-                    {feature.description}
-                  </Text>
-                </Stack>
+              <Card key={feature.title} className="p-4">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold">{feature.title}</h3>
+                  <p className="text-sm text-mutedForeground">{feature.description}</p>
+                </div>
               </Card>
             ))}
-          </SimpleGrid>
-        </Container>
+          </div>
+        </div>
       </section>
 
       <section className="section">
-        <Container size="lg">
-          <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xl">
-            <Stack gap="sm">
+        <div className="container">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-4">
               <SectionHeader
                 title="Validated intervention thresholds"
                 subtitle="Multi-biomarker triggers with clear action steps."
               />
-              <SimpleGrid cols={{ base: 1, sm: 2 }}>
+              <div className="grid gap-4 sm:grid-cols-2">
                 {interventionTriggers.map((trigger) => (
-                  <Card key={trigger.title} withBorder radius="md" padding="lg">
-                    <Stack gap="xs">
-                      <Title order={5}>{trigger.title}</Title>
+                  <Card key={trigger.title} className="p-4">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-semibold">{trigger.title}</h3>
                       {trigger.details.map((detail) => (
-                        <Text key={detail} size="sm" c="dimmed">
+                        <p key={detail} className="text-sm text-mutedForeground">
                           • {detail}
-                        </Text>
+                        </p>
                       ))}
-                    </Stack>
+                    </div>
                   </Card>
                 ))}
-              </SimpleGrid>
-            </Stack>
-            <Stack gap="sm">
+              </div>
+            </div>
+            <div className="space-y-4">
               <SectionHeader
                 title="Evidence-backed recommendations"
                 subtitle="Every change shows confidence, citation, and why."
               />
-              <Stack gap="md">
+              <div className="space-y-4">
                 {evidenceExamples.map((example) => (
-                  <Card key={example.recommendation} withBorder radius="md" padding="lg">
-                    <Stack gap="xs">
-                      <Group justify="space-between">
-                        <Title order={5}>{example.recommendation}</Title>
+                  <Card key={example.recommendation} className="p-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-lg font-semibold">{example.recommendation}</h3>
                         <ConfidenceBadge level={example.confidence} />
-                      </Group>
-                      <Text size="sm" c="dimmed">
-                        {example.source}
-                      </Text>
-                    </Stack>
+                      </div>
+                      <p className="text-sm text-mutedForeground">{example.source}</p>
+                    </div>
                   </Card>
                 ))}
-              </Stack>
-            </Stack>
-          </SimpleGrid>
-        </Container>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section className="section bg-muted/30">
-        <Container size="lg">
-          <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xl">
-            <Stack gap="sm">
+        <div className="container">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="space-y-4">
               <SectionHeader
                 title="Key product experiences"
                 subtitle="Six views that cover recovery, nutrition, and research."
               />
-              <Stack gap={4}>
+              <div className="space-y-2">
                 {keyPages.map((item) => (
-                  <Text key={item} size="sm" c="dimmed">
+                  <p key={item} className="text-sm text-mutedForeground">
                     • {item}
-                  </Text>
+                  </p>
                 ))}
-              </Stack>
-            </Stack>
-            <Card withBorder radius="md" padding="lg">
-              <Stack gap="sm">
-                <Title order={4}>Technical foundation</Title>
-                <Text size="sm" c="dimmed">
-                  • Next.js 15 + TypeScript + Mantine UI
-                </Text>
-                <Text size="sm" c="dimmed">
-                  • Supabase-ready data layer with RLS and PITR
-                </Text>
-                <Text size="sm" c="dimmed">
-                  • Terra API wearable coverage + fallback integrations
-                </Text>
-                <Text size="sm" c="dimmed">
-                  • Research citation engine with GRADE confidence
-                </Text>
-              </Stack>
+              </div>
+            </div>
+            <Card className="p-4">
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold">Technical foundation</h3>
+                {[
+                  "Next.js 15 + TypeScript + Tailwind UI",
+                  "Supabase-ready data layer with RLS and PITR",
+                  "Terra API wearable coverage + fallback integrations",
+                  "Research citation engine with GRADE confidence"
+                ].map((item) => (
+                  <p key={item} className="text-sm text-mutedForeground">
+                    • {item}
+                  </p>
+                ))}
+              </div>
             </Card>
-          </SimpleGrid>
-        </Container>
+          </div>
+        </div>
       </section>
 
       <section className="section">
-        <Container size="lg">
-          <Card withBorder radius="md" padding="xl">
-            <SimpleGrid cols={{ base: 1, lg: 2 }} spacing="xl">
-              <Stack gap="sm">
-                <Title order={3}>Target outcomes</Title>
-                <Text size="sm" c="dimmed">
+        <div className="container">
+          <Card className="p-6">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">Target outcomes</h3>
+                <p className="text-sm text-mutedForeground">
                   • ±150 kcal TDEE accuracy after 4 weeks of data
-                </Text>
-                <Text size="sm" c="dimmed">
+                </p>
+                <p className="text-sm text-mutedForeground">
                   • Reverse diet success with &lt;2 kg fat gain over 12 weeks
-                </Text>
-                <Text size="sm" c="dimmed">
+                </p>
+                <p className="text-sm text-mutedForeground">
                   • HRV recovery to baseline within 8 weeks
-                </Text>
-              </Stack>
-              <Stack gap="sm">
-                <Title order={3}>Built for trust</Title>
-                <Text size="sm" c="dimmed">
+                </p>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-semibold">Built for trust</h3>
+                <p className="text-sm text-mutedForeground">
                   • GRADE confidence indicators on every recommendation
-                </Text>
-                <Text size="sm" c="dimmed">
+                </p>
+                <p className="text-sm text-mutedForeground">
                   • RED-S screening with supportive language and referrals
-                </Text>
-                <Text size="sm" c="dimmed">
+                </p>
+                <p className="text-sm text-mutedForeground">
                   • HIPAA-focused architecture (encryption, audit logging, RLS)
-                </Text>
-              </Stack>
-            </SimpleGrid>
+                </p>
+              </div>
+            </div>
           </Card>
-        </Container>
+        </div>
       </section>
     </>
   )
