@@ -4,9 +4,12 @@ import { getSupabaseEnv } from "@/lib/supabase/env"
 
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies()
-  const { url, anonKey } = getSupabaseEnv()
+  const env = getSupabaseEnv()
+  if (!env) {
+    return null
+  }
 
-  return createServerClient(url, anonKey, {
+  return createServerClient(env.url, env.anonKey, {
     cookies: {
       get(name: string) {
         return cookieStore.get(name)?.value
@@ -23,6 +26,9 @@ export async function createSupabaseServerClient() {
 
 export async function getServerSession() {
   const supabase = await createSupabaseServerClient()
+  if (!supabase) {
+    return null
+  }
   const { data } = await supabase.auth.getSession()
   return data.session
 }
