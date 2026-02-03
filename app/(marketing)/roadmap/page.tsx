@@ -1,5 +1,6 @@
 import { SectionHeader } from "@/components/section-header"
 import { Timeline } from "@/components/timeline"
+import { Container, Stack } from "@mantine/core"
 
 const roadmapItems = [
   {
@@ -47,13 +48,15 @@ const roadmapItems = [
 export default function RoadmapPage() {
   return (
     <section className="section">
-      <div className="container space-y-8">
-        <SectionHeader
-          title="Development roadmap"
-          subtitle="A staged build that prioritizes scientific accuracy and recovery outcomes."
-        />
-        <Timeline items={roadmapItems} />
-      </div>
+      <Container size="lg">
+        <Stack gap="xl">
+          <SectionHeader
+            title="Development roadmap"
+            subtitle="A staged build that prioritizes scientific accuracy and recovery outcomes."
+          />
+          <Timeline items={roadmapItems} />
+        </Stack>
+      </Container>
     </section>
   )
 }

@@ -3,8 +3,11 @@ import { getMacroTargets } from "@/lib/data/macros"
 import { getResearchPapers } from "@/lib/data/research"
 import { SectionHeader } from "@/components/section-header"
 import { StatCard } from "@/components/stat-card"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MiniLineChart } from "@/components/charts/mini-line-chart"
+import { BaselineStatusCard } from "@/components/baseline-status-card"
+import { ConfidenceBadge } from "@/components/confidence-badge"
+import { InterventionAlert } from "@/components/intervention-alert"
+import { Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core"
 
 export default async function DashboardPage() {
   const biometrics = await getBiometricsSummary()
@@ -13,77 +16,128 @@ export default async function DashboardPage() {
   const research = await getResearchPapers()
 
   return (
-    <div className="space-y-8">
+    <Stack gap="xl">
       <SectionHeader
         title="Daily snapshot"
         subtitle="Biometric recovery signals and adaptive nutrition targets."
       />
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <SimpleGrid cols={{ base: 1, md: 2, xl: 4 }}>
         <StatCard title="HRV" value={`${biometrics.hrvMs} ms`} description="Parasympathetic recovery" />
         <StatCard title="RHR" value={`${biometrics.restingHrBpm} bpm`} description="Metabolic stress marker" />
         <StatCard title="Sleep" value={`${biometrics.sleepDurationHours} hrs`} description="Last night duration" />
         <StatCard title="Readiness" value={`${biometrics.readinessScore}%`} description="Overall recovery score" />
-      </div>
+      </SimpleGrid>
 
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">7-day recovery trend</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Group justify="space-between">
+              <Title order={4}>Recovery grade</Title>
+              <Text size="sm" c="dimmed">
+                {biometrics.recoveryGrade.toUpperCase()}
+              </Text>
+            </Group>
+            <Text size="sm" c="dimmed">
+              Baseline HRV {biometrics.hrvBaselineMean} ± {biometrics.hrvBaselineSd} ms ·
+              RHR baseline {biometrics.rhrBaselineMean} bpm.
+            </Text>
+            <Text size="sm" c="dimmed">
+              Device accuracy: {biometrics.sourceDevice} (CCC {biometrics.deviceAccuracyCcc})
+            </Text>
+          </Stack>
+        </Card>
+        <BaselineStatusCard
+          daysComplete={biometrics.baselineDaysComplete}
+          daysRequired={biometrics.baselineDaysRequired}
+          established={biometrics.baselineEstablished}
+        />
+      </SimpleGrid>
+
+      <InterventionAlert
+        title="Recovery intervention triggered"
+        details={[
+          "HRV trend below baseline threshold.",
+          "RHR elevated above baseline for two days.",
+          "Increase calories 5-10% (carbohydrate priority)."
+        ]}
+        active={biometrics.interventionTriggered}
+      />
+
+      <SimpleGrid cols={{ base: 1, lg: 2 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>7-day recovery trend</Title>
             <MiniLineChart points={trend.map((item) => item.hrvMs)} />
-            <div className="grid grid-cols-3 gap-4 text-sm text-muted-foreground">
-              <div>
-                <p>Average HRV</p>
-                <p className="text-lg font-semibold text-foreground">67 ms</p>
-              </div>
-              <div>
-                <p>Average RHR</p>
-                <p className="text-lg font-semibold text-foreground">55 bpm</p>
-              </div>
-              <div>
-                <p>Sleep quality</p>
-                <p className="text-lg font-semibold text-foreground">79/100</p>
-              </div>
-            </div>
-          </CardContent>
+            <SimpleGrid cols={3}>
+              <Stack gap={2}>
+                <Text size="xs" c="dimmed">
+                  Average HRV
+                </Text>
+                <Text fw={600}>67 ms</Text>
+              </Stack>
+              <Stack gap={2}>
+                <Text size="xs" c="dimmed">
+                  Average RHR
+                </Text>
+                <Text fw={600}>55 bpm</Text>
+              </Stack>
+              <Stack gap={2}>
+                <Text size="xs" c="dimmed">
+                  Sleep quality
+                </Text>
+                <Text fw={600}>79/100</Text>
+              </Stack>
+            </SimpleGrid>
+          </Stack>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Today&apos;s macro targets</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-muted-foreground">
-            <p className="text-2xl font-semibold text-foreground">{macros.calories} kcal</p>
-            <div className="grid grid-cols-3 gap-2">
-              <div>
-                <p>Protein</p>
-                <p className="text-lg font-semibold text-foreground">{macros.proteinG} g</p>
-              </div>
-              <div>
-                <p>Carbs</p>
-                <p className="text-lg font-semibold text-foreground">{macros.carbsG} g</p>
-              </div>
-              <div>
-                <p>Fat</p>
-                <p className="text-lg font-semibold text-foreground">{macros.fatG} g</p>
-              </div>
-            </div>
-            <div className="rounded-md border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Group justify="space-between">
+              <Title order={4}>Today&apos;s macro targets</Title>
+              <ConfidenceBadge level={macros.confidenceLevel} />
+            </Group>
+            <Text fw={600} size="xl">
+              {macros.calories} kcal
+            </Text>
+            <SimpleGrid cols={3}>
+              <Stack gap={2}>
+                <Text size="xs" c="dimmed">
+                  Protein
+                </Text>
+                <Text fw={600}>{macros.proteinG} g</Text>
+              </Stack>
+              <Stack gap={2}>
+                <Text size="xs" c="dimmed">
+                  Carbs
+                </Text>
+                <Text fw={600}>{macros.carbsG} g</Text>
+              </Stack>
+              <Stack gap={2}>
+                <Text size="xs" c="dimmed">
+                  Fat
+                </Text>
+                <Text fw={600}>{macros.fatG} g</Text>
+              </Stack>
+            </SimpleGrid>
+            <Text size="sm" c="dimmed">
               {macros.adjustmentReason}
-            </div>
-          </CardContent>
+            </Text>
+          </Stack>
         </Card>
-      </div>
+      </SimpleGrid>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Research highlight</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground">
-          {research[0]?.title}
-        </CardContent>
+      <Card withBorder radius="md" padding="lg">
+        <Stack gap="sm">
+          <Group justify="space-between">
+            <Title order={4}>Research highlight</Title>
+            {research[0] ? <ConfidenceBadge level={research[0].confidenceLevel} /> : null}
+          </Group>
+          <Text size="sm" c="dimmed">
+            {research[0]?.title}
+          </Text>
+        </Stack>
       </Card>
-    </div>
+    </Stack>
   )
 }

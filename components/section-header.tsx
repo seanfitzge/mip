@@ -1,3 +1,5 @@
+import { Stack, Text, Title } from "@mantine/core"
+
 type SectionHeaderProps = {
   title: string
   subtitle?: string
@@ -5,9 +7,13 @@ type SectionHeaderProps = {
 
 export function SectionHeader({ title, subtitle }: SectionHeaderProps) {
   return (
-    <div className="mb-6">
-      <h2 className="text-2xl font-semibold">{title}</h2>
-      {subtitle ? <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p> : null}
-    </div>
+    <Stack gap={4} mb="lg">
+      <Title order={2}>{title}</Title>
+      {subtitle ? (
+        <Text size="sm" c="dimmed">
+          {subtitle}
+        </Text>
+      ) : null}
+    </Stack>
   )
 }

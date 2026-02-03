@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
+import { Anchor, Badge, Stack, Text } from "@mantine/core"
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard" },
@@ -12,25 +12,31 @@ const navItems = [
 
 export function AppSidebar() {
   return (
-    <aside className="hidden min-h-screen w-64 border-r border-border bg-background px-4 py-6 md:block">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground">Metabolic Intelligence</p>
-          <p className="text-lg font-semibold">MIP Console</p>
-        </div>
+    <aside className="hidden min-h-screen w-64 border-r border-[var(--mantine-color-default-border)] px-4 py-6 md:block">
+      <Stack gap="lg">
+        <Stack gap={2}>
+          <Text size="sm" c="dimmed">
+            Metabolic Intelligence
+          </Text>
+          <Text fw={600} size="lg">
+            MIP Console
+          </Text>
+        </Stack>
         <Badge variant="outline">Preview</Badge>
-      </div>
-      <nav className="space-y-1 text-sm">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className="flex items-center rounded-md px-3 py-2 text-muted-foreground hover:bg-muted hover:text-foreground"
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
+        <Stack gap="xs">
+          {navItems.map((item) => (
+            <Anchor
+              key={item.href}
+              component={Link}
+              href={item.href}
+              c="dimmed"
+              underline="never"
+            >
+              {item.label}
+            </Anchor>
+          ))}
+        </Stack>
+      </Stack>
     </aside>
   )
 }

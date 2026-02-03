@@ -1,17 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SectionHeader } from "@/components/section-header"
+import { Card, Container, SimpleGrid, Stack, Text, Title } from "@mantine/core"
 
 const differentiators = [
-  "Evidence-based recommendations with citations",
-  "Biometric integration that impacts nutrition decisions",
-  "Reverse diet protocols built for recovery",
-  "Predictive metabolic modeling over time"
+  "GRADE-calibrated evidence confidence on every recommendation",
+  "Validated biometric intervention thresholds (7.5% HRV decline, +5 bpm RHR)",
+  "Reverse diet protocols with predicted timelines",
+  "Implicit training status classification without questionnaires"
 ]
 
 const ethics = [
-  "Minimum energy availability safeguards and RED-S alerts",
+  "Sex-specific energy availability safeguards and RED-S screening",
   "Data ownership and export for every user",
-  "Peer-reviewed sources with quality ratings",
+  "Peer-reviewed sources with GRADE quality ratings",
   "Transparent limitations and uncertainty labeling"
 ]
 
@@ -25,78 +25,94 @@ const successMetrics = [
 export default function VisionPage() {
   return (
     <section className="section">
-      <div className="container space-y-12">
-        <div className="space-y-4">
-          <p className="text-sm font-semibold uppercase text-muted-foreground">
-            Executive Vision
-          </p>
-          <h1 className="text-4xl font-semibold">Fix the metabolic blind spot.</h1>
-          <p className="max-w-3xl text-base text-muted-foreground md:text-lg">
-            Athletes can track calories and macros, but they cannot see how their
-            metabolism is responding. MIP connects recovery biomarkers to
-            evidence-based nutrition, eliminating guesswork.
-          </p>
-        </div>
+      <Container size="lg">
+        <Stack gap="xl">
+          <Stack gap="sm">
+            <Text size="sm" fw={600} tt="uppercase" c="dimmed">
+              Executive Vision
+            </Text>
+            <Title order={1}>Fix the metabolic blind spot.</Title>
+            <Text c="dimmed" maw={720}>
+              Athletes can track calories and macros, but they cannot see how their
+              metabolism is responding. MIP connects recovery biomarkers to
+              evidence-based nutrition with confidence grading.
+            </Text>
+          </Stack>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">The problem</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
-              <p>• Recovery metrics are ignored or siloed.</p>
-              <p>• Reverse dieting is trial-and-error.</p>
-              <p>• Research is too dense to apply daily.</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">The solution</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3 text-sm text-muted-foreground">
-              <p>• Real-time metabolic insights from wearables.</p>
-              <p>• Adaptive macro guidance with citations.</p>
-              <p>• Predictive modeling for long-term planning.</p>
-            </CardContent>
-          </Card>
-        </div>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Card withBorder radius="md" padding="lg">
+              <Stack gap="sm">
+                <Title order={4}>The problem</Title>
+                <Text size="sm" c="dimmed">
+                  • Recovery metrics are ignored or siloed.
+                </Text>
+                <Text size="sm" c="dimmed">
+                  • Reverse dieting is trial-and-error.
+                </Text>
+                <Text size="sm" c="dimmed">
+                  • Research is too dense to apply daily.
+                </Text>
+              </Stack>
+            </Card>
+            <Card withBorder radius="md" padding="lg">
+              <Stack gap="sm">
+                <Title order={4}>The solution</Title>
+                <Text size="sm" c="dimmed">
+                  • Real-time metabolic insights from wearables.
+                </Text>
+                <Text size="sm" c="dimmed">
+                  • Adaptive macro guidance with citations.
+                </Text>
+                <Text size="sm" c="dimmed">
+                  • Predictive modeling for long-term planning.
+                </Text>
+              </Stack>
+            </Card>
+          </SimpleGrid>
 
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div>
-            <SectionHeader
-              title="Key differentiators"
-              subtitle="Why MIP wins on trust and outcomes."
-            />
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              {differentiators.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <SectionHeader
-              title="Ethical guardrails"
-              subtitle="Built to protect metabolic health."
-            />
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              {ethics.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <SectionHeader
-              title="Success metrics"
-              subtitle="Signals we track as the platform scales."
-            />
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              {successMetrics.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
+          <SimpleGrid cols={{ base: 1, lg: 3 }}>
+            <div>
+              <SectionHeader
+                title="Key differentiators"
+                subtitle="Why MIP wins on trust and outcomes."
+              />
+              <Stack gap={4}>
+                {differentiators.map((item) => (
+                  <Text key={item} size="sm" c="dimmed">
+                    • {item}
+                  </Text>
+                ))}
+              </Stack>
+            </div>
+            <div>
+              <SectionHeader
+                title="Ethical guardrails"
+                subtitle="Built to protect metabolic health."
+              />
+              <Stack gap={4}>
+                {ethics.map((item) => (
+                  <Text key={item} size="sm" c="dimmed">
+                    • {item}
+                  </Text>
+                ))}
+              </Stack>
+            </div>
+            <div>
+              <SectionHeader
+                title="Success metrics"
+                subtitle="Signals we track as the platform scales."
+              />
+              <Stack gap={4}>
+                {successMetrics.map((item) => (
+                  <Text key={item} size="sm" c="dimmed">
+                    • {item}
+                  </Text>
+                ))}
+              </Stack>
+            </div>
+          </SimpleGrid>
+        </Stack>
+      </Container>
     </section>
   )
 }

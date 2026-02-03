@@ -1,6 +1,6 @@
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge, Card, Group, List, Stack, Text, Title } from "@mantine/core"
 import type { ResearchPaper } from "@/types/research"
+import { ConfidenceBadge } from "@/components/confidence-badge"
 
 type ResearchCitationProps = {
   paper: ResearchPaper
@@ -8,32 +8,40 @@ type ResearchCitationProps = {
 
 export function ResearchCitation({ paper }: ResearchCitationProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">{paper.title}</CardTitle>
-        <p className="text-xs text-muted-foreground">
-          {paper.authors} ({paper.year}) · {paper.journal}
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="outline">{paper.studyType}</Badge>
-          <Badge variant="muted">Quality: {paper.qualityRating}/5</Badge>
+    <Card withBorder radius="md" padding="lg">
+      <Stack gap="sm">
+        <div>
+          <Title order={5}>{paper.title}</Title>
+          <Text size="xs" c="dimmed">
+            {paper.authors} ({paper.year}) · {paper.journal}
+          </Text>
         </div>
-        <ul className="space-y-1 text-sm text-muted-foreground">
+        <Group gap="xs">
+          <Badge variant="light">{paper.studyType}</Badge>
+          <Badge variant="outline">Quality {paper.qualityRating}/5</Badge>
+          <ConfidenceBadge level={paper.confidenceLevel} />
+        </Group>
+        {paper.eli5Summary ? (
+          <Text size="sm" c="dimmed">
+            {paper.eli5Summary}
+          </Text>
+        ) : null}
+        <List size="sm" spacing="xs">
           {paper.keyFindings.map((finding) => (
-            <li key={finding}>• {finding}</li>
+            <List.Item key={finding}>{finding}</List.Item>
           ))}
-        </ul>
-        <a
-          className="text-xs text-primary underline"
+        </List>
+        <Text
+          component="a"
           href={`https://doi.org/${paper.doi}`}
           target="_blank"
           rel="noreferrer"
+          size="xs"
+          c="indigo.4"
         >
           Read full study
-        </a>
-      </CardContent>
+        </Text>
+      </Stack>
     </Card>
   )
 }

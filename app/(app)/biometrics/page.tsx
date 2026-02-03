@@ -1,64 +1,84 @@
 import { getBiometricsSummary, getBiometricsTrend } from "@/lib/data/biometrics"
 import { SectionHeader } from "@/components/section-header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MiniLineChart } from "@/components/charts/mini-line-chart"
+import { Card, Group, SimpleGrid, Stack, Text, Title } from "@mantine/core"
 
 export default async function BiometricsPage() {
   const summary = await getBiometricsSummary()
   const trend = await getBiometricsTrend()
 
   return (
-    <div className="space-y-8">
+    <Stack gap="xl">
       <SectionHeader
         title="Biometrics"
         subtitle="Recovery metrics used to adjust nutrition targets."
       />
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">HRV trend</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+      <SimpleGrid cols={{ base: 1, lg: 3 }}>
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>HRV trend</Title>
             <MiniLineChart points={trend.map((item) => item.hrvMs)} />
-            <p className="text-sm text-muted-foreground">
-              Current HRV {summary.hrvMs} ms, improving from baseline.
-            </p>
-          </CardContent>
+            <Text size="sm" c="dimmed">
+              Current HRV {summary.hrvMs} ms, baseline {summary.hrvBaselineMean} ±{" "}
+              {summary.hrvBaselineSd} ms.
+            </Text>
+          </Stack>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Resting heart rate</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>Resting heart rate</Title>
             <MiniLineChart points={trend.map((item) => item.restingHrBpm)} />
-            <p className="text-sm text-muted-foreground">
-              RHR at {summary.restingHrBpm} bpm, steady and trending down.
-            </p>
-          </CardContent>
+            <Text size="sm" c="dimmed">
+              RHR {summary.restingHrBpm} bpm, baseline {summary.rhrBaselineMean} bpm.
+            </Text>
+          </Stack>
         </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Sleep quality</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+        <Card withBorder radius="md" padding="lg">
+          <Stack gap="sm">
+            <Title order={4}>Sleep quality</Title>
             <MiniLineChart points={trend.map((item) => item.sleepQuality)} />
-            <p className="text-sm text-muted-foreground">
-              Sleep score {summary.sleepQuality}/100, above weekly average.
-            </p>
-          </CardContent>
+            <Text size="sm" c="dimmed">
+              Sleep score {summary.sleepQuality}/100 with {summary.sleepDurationHours} hrs
+              last night.
+            </Text>
+          </Stack>
         </Card>
-      </div>
+      </SimpleGrid>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Adaptive logic preview</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 text-sm text-muted-foreground">
-          <p>• HRV below baseline and RHR elevated triggers +5-10% calories.</p>
-          <p>• Sleep quality below 70 for 3 days shifts carbs to evening.</p>
-          <p>• Stable recovery allows reverse diet progression.</p>
-        </CardContent>
+      <Card withBorder radius="md" padding="lg">
+        <Stack gap="sm">
+          <Group justify="space-between">
+            <Title order={4}>Personal baselines</Title>
+            <Text size="sm" c="dimmed">
+              {summary.sourceDevice} (CCC {summary.deviceAccuracyCcc})
+            </Text>
+          </Group>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Text size="sm" c="dimmed">
+              HRV baseline: {summary.hrvBaselineMean} ± {summary.hrvBaselineSd} ms
+            </Text>
+            <Text size="sm" c="dimmed">
+              RHR baseline: {summary.rhrBaselineMean} ± {summary.rhrBaselineSd} bpm
+            </Text>
+          </SimpleGrid>
+        </Stack>
       </Card>
-    </div>
+
+      <Card withBorder radius="md" padding="lg">
+        <Stack gap="xs">
+          <Title order={4}>Validated intervention logic</Title>
+          <Text size="sm" c="dimmed">
+            • HRV decline ≥7.5% from baseline or 0.5 SD below baseline triggers metabolic
+            stress response.
+          </Text>
+          <Text size="sm" c="dimmed">
+            • RHR ≥5 bpm above baseline for 2 days strengthens intervention signal.
+          </Text>
+          <Text size="sm" c="dimmed">
+            • Sleep quality &lt;70 for 3 days shifts carbs to evening.
+          </Text>
+        </Stack>
+      </Card>
+    </Stack>
   )
 }

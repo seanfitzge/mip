@@ -1,8 +1,14 @@
 import "./globals.css"
+import "@mantine/core/styles.css"
+import "@mantine/charts/styles.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { ColorSchemeScript, MantineProvider, createTheme } from "@mantine/core"
 
-const inter = Inter({ subsets: ["latin"] })
+const theme = createTheme({
+  fontFamily: "Inter, system-ui, -apple-system, sans-serif",
+  primaryColor: "indigo",
+  defaultRadius: "md"
+})
 
 export const metadata: Metadata = {
   title: "Metabolic Intelligence Platform",
@@ -11,8 +17,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body>{children}</body>
+    <html lang="en">
+      <head>
+        <ColorSchemeScript defaultColorScheme="dark" />
+      </head>
+      <body>
+        <MantineProvider theme={theme} defaultColorScheme="dark">
+          {children}
+        </MantineProvider>
+      </body>
     </html>
   )
 }

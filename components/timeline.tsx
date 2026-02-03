@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, List, Stack, Text, Title } from "@mantine/core"
 
 type TimelineItem = {
   title: string
@@ -12,22 +12,24 @@ type TimelineProps = {
 
 export function Timeline({ items }: TimelineProps) {
   return (
-    <div className="space-y-4">
+    <Stack gap="md">
       {items.map((item) => (
-        <Card key={item.title}>
-          <CardContent className="space-y-3">
+        <Card key={item.title} withBorder radius="md" padding="lg">
+          <Stack gap="sm">
             <div>
-              <p className="text-sm text-muted-foreground">{item.subtitle}</p>
-              <h3 className="text-lg font-semibold">{item.title}</h3>
+              <Text size="xs" c="dimmed" tt="uppercase">
+                {item.subtitle}
+              </Text>
+              <Title order={4}>{item.title}</Title>
             </div>
-            <ul className="space-y-1 text-sm text-muted-foreground">
+            <List size="sm" spacing="xs">
               {item.details.map((detail) => (
-                <li key={detail}>• {detail}</li>
+                <List.Item key={detail}>{detail}</List.Item>
               ))}
-            </ul>
-          </CardContent>
+            </List>
+          </Stack>
         </Card>
       ))}
-    </div>
+    </Stack>
   )
 }

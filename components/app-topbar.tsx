@@ -1,16 +1,18 @@
-import { Button } from "@/components/ui/button"
+import { Button, Group, Stack, Text, Title } from "@mantine/core"
 
 export function AppTopbar() {
   return (
-    <div className="flex items-center justify-between border-b border-border bg-background px-6 py-4">
-      <div>
-        <p className="text-xs uppercase text-muted-foreground">Today</p>
-        <h1 className="text-xl font-semibold">Metabolic Overview</h1>
-      </div>
-      <div className="flex items-center gap-3">
-        <Button variant="ghost">Export</Button>
+    <Group justify="space-between" px="lg" py="md" style={{ borderBottom: "1px solid var(--mantine-color-default-border)" }}>
+      <Stack gap={2}>
+        <Text size="xs" c="dimmed" tt="uppercase">
+          Today
+        </Text>
+        <Title order={3}>Metabolic Overview</Title>
+      </Stack>
+      <Group>
+        <Button variant="light">Export</Button>
         <Button>Start Sync</Button>
-      </div>
-    </div>
+      </Group>
+    </Group>
   )
 }
